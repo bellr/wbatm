@@ -1,0 +1,54 @@
+		Детальное описание параметров:
+	<a href="http://wiki.webmoney.ru/wiki/show/Interfeys_X9">http://wiki.webmoney.ru/wiki/show/Interfeys_X1</a>
+	<br />
+
+выписка счета<br>
+	<form action="" method="post">
+	<input type="hidden" name="interface" value="{interface}" />
+	<input type="hidden" name="process" value="webmoney.wm_example" />
+<table>
+	<tr>
+		<td>WM-идентфиикатор (signer):</td>
+		<td><select name="type_wmid">
+			{option}
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td>Тип кошелька:</td>
+		<td>
+			<select name="purse_type">
+			<option value="WMZ">WMZ</option>
+			<option value="WMR">WMR</option>
+			<option value="WME">WME</option>
+			<option value="WMU">WMU</option>
+			<option value="WMB">WMB</option>
+		</select>
+		</td>
+	</tr>
+	<tr>
+		<td>ID счета:</td>
+		<td><input type="text" name="pay_id" value="" /></td>
+	</tr>
+	<tr>
+		<td>WMID:</td>
+		<td><input type="text" name="wmid" value="871652566746" /></td>
+	</tr>
+	<tr>
+		<td>Сумма</td>
+		<td><input type="text" name="amount" value="0.01" /></td>
+	</tr>
+	<tr>
+		<td>Описание</td>
+		<td><input type="text" name="desc" value="Тестовое описание" /></td>
+	</tr>	
+	<tr>
+		<td>адрес доставки товара</td>
+		<td><input type="text" name="addres" value="Тестовое адрес доставки товара" /></td>
+	</tr>	
+	<tr>
+		<td colspan=2><input type="submit" value="Выписать счет" /></td>
+	</tr>	
+</table>
+	</form>
+

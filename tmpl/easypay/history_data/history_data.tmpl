@@ -1,0 +1,32 @@
+<form method="post" action="" onSubmit="ajaxVs({block:'process',act:'easypay.history_data',p:serialize(this),callback:'appendTo',extra:{appendElement:'content'}}); return false;">
+	<select name="purse">
+	{option_acount}
+	</select>
+	<select name="type">
+		<option value="4">Входящие</option>
+		<option value="3">Исходящие</option>
+		<option value="1">Пополнение</option>
+	</select>
+	<select name="day_n">
+	{days}
+	</select></span>
+	<select name="mount_n">
+	{months}
+	</select></span>
+	<select name="year_n">
+	{year}
+	</select>
+<b>&nbsp;&nbsp;по :&nbsp;&nbsp;</b>
+		<select name="day_k">
+		{days}
+		</select></span>
+	<select name="mount_k">
+	{months}
+	</select></span>
+	<select name="year_k">
+	{year}
+	</select>
+<input type="submit" name=lists value=Посмотреть />
+</form>
+<div id="content"></div>
+

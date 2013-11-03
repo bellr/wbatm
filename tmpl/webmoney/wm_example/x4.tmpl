@@ -1,0 +1,58 @@
+		Детальное описание параметров:
+	<a href="http://wiki.webmoney.ru/wiki/show/Interfeys_X4">http://wiki.webmoney.ru/wiki/show/Interfeys_X4</a>
+	<br />
+
+выписка счета<br>
+	<form action="" method="post">
+	<input type="hidden" name="interface" value="{interface}" />
+	<input type="hidden" name="process" value="webmoney.wm_example" />
+<table>
+	<tr>
+		<td>WM-идентфиикатор (signer):</td>
+		<td><select name="type_wmid">
+			{option}
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td>Тип кошелька с которого будет перевод:</td>
+		<td>
+			<select name="purse_type">
+			<option value="WMZ">WMZ</option>
+			<option value="WMR">WMR</option>
+			<option value="WME">WME</option>
+			<option value="WMU">WMU</option>
+			<option value="WMB">WMB</option>
+		</select>
+		</td>
+	</tr>
+	<tr>
+		<td>номер операции (в системе WebMoney):</td>
+		<td><input type="text" name="more_idpay" value="0" /></td>
+	</tr>	
+	<tr>
+		<td>ID платежа:</td>
+		<td><input type="text" name="id_pay" value="0" /></td>
+	</tr>
+	<tr>
+		<td>номер счета (в системе WebMoney) по которому выполнялась операция:</td>
+		<td><input type="text" name="wmid_pay" value="0" /></td>
+	</tr>
+	<tr>
+		<td>номер счета:</td>
+		<td><input type="text" name="bill_pay" value="0" /></td>
+	</tr>	
+	<tr>
+		<td>минимальное время и дата выполнения операции:</td>
+		<td><input type="text" name="start_date" value="{start_date}" /></td>
+	</tr>	
+	<tr>
+		<td>максимальное время и дата выполнения операции</td>
+		<td><input type="text" name="end_date" value="{end_date}" /></td>
+	</tr>
+	<tr>
+		<td colspan=2><input type="submit" value="Проверить" /></td>
+	</tr>	
+</table>
+	</form>
+

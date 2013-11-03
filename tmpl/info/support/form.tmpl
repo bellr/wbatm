@@ -1,0 +1,13 @@
+<form  name="check_support" onSubmit="ajaxVs({block:'process',act:'info.support',p:serialize(this)}); return false;">
+	<input type="hidden" name="owner_id" value="{owner_id}" />
+    <input type="hidden" name="action" value="{action}" />
+	<input type="hidden" name="email" value="{email}" />
+	<input type="hidden" name="indeficator" value="{indeficator}" />
+    <div class="input">
+        <span class="title mes">Ответ:</span> <textarea cols="60" rows="10"  maxlength="1020" name="message"></textarea>
+    </div>
+    <div class="input btn">
+        <button class="button_yellow">Отправить</button>
+    </div>
+</form>
+<button class="button_yellow" onClick="ajaxVs({block:'process',act:'info.support',p:'action=close&owner_id={owner_id}'}); return false;">Закрыть тикет</button>

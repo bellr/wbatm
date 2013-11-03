@@ -1,0 +1,1 @@
+function appendTo(parms) {append(document.getElementById(parms.extra.appendElement),parms.resData.html);}

@@ -1,0 +1,5 @@
+/.idea/
+/cache/
+
+# except do not ignore .gitignore
+!.gitignore

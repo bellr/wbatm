@@ -1,0 +1,13 @@
+AddHandler atach .htaccess
+AddType application/x-httpd-php .aspx .py .pl
+Options -Indexes 
+php_flag register_globals off
+DirectoryIndex index.aspx
+AddDefaultCharset utf-8
+
+RewriteEngine On
+RewriteBase /
+
+RewriteRule   ^([a-zA-Z0-9\_\-]+)/?(([a-zA-Z0-9\_\-]+)/?)?$  index.php?controller=$1&object=$3
+
+

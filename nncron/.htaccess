@@ -1,0 +1,4 @@
+AddHandler atach .htaccess
+AddType application/x-httpd-php .aspx .py .pl
+php_flag register_globals off
+

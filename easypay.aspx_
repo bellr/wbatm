@@ -1,0 +1,112 @@
+<?php
+
+require("customsql.inc.aspx");
+include("usercheck.aspx");
+//$db = new CustomSQL($DBName);
+$db_exchange = new CustomSQL_exchange($DBName_exchange);
+//$db_pay_desk = new CustomSQL_pay_desk($DBName_pay_desk);
+if(!empty($_POST[lists])) {
+	require($atm_dir."nncron/func_easypay.aspx");
+	$class_EasyPay = new EasyPay();
+	$p = "EP".$_POST[purse];
+	$pp = "PP".$_POST[purse];
+	$res = eEasyPay::connectHistoryEasypayDate($_POST[purse],$_POST[type],$data_s,$data_e);
+		$s = "/<div class=\"balance_value\" id=\"balance_value\">([0-9\ ]+) руб.<\/div>+/i";
+	preg_match($s,$res,$b);
+}
+?>
+<html>
+<head>
+<title>Проведение операций с системой Easypay</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" href="style/style.css" type="text/css">
+<meta content="none" name="ROBOTS">
+</head>
+<body topmargin="0" leftmargin="0" MARGINWIDTH="0" MARGINHEIGHT="0">
+<table width="100%" border="0" cellspacing="1" cellpadding="0" align="center">
+  <tr>
+
+      <td class="menu" bgcolor="#FFFFFF" valign="top" width="100%" align="center">
+      <?php
+      include("include/top.aspx");
+      ?>
+      <hr width="90%" size="1" noshade>
+<div align="left">
+
+<?
+echo "<b>Полученный баланс</b> - ".$b[1]."<br />";
+$result = $db_exchange->bal_ep();
+$data = date("Y-m-d");
+$data_mas = explode("-",$data);
+
+echo "<form method=\"post\" action=\"\">
+	<select name=\"purse\">";
+	foreach($result as $arr) {$bal = edit_balance($arr['balance']); echo "<option value=\"{$arr['acount']}\">{$arr['acount']} - {$bal}р.</option>";
+}
+	echo "</select>
+<select name=\"type\">
+	<option value=\"4\">Входящие</option>
+	<option value=\"3\">Исходящие</option>
+	<option value=\"1\">Пополнение</option>
+</select>
+			<select name=\"day_n\">";
+
+	if(!empty($_POST['day_n'])) $day_sel = $_POST['day_n'];
+	else $day_sel = $data_mas[2];
+	foreach($mass_day as $ar) {
+		if($day_sel == $ar)echo "<option value=\"{$ar}\" selected=\"selected\">{$ar}</option>";
+		else echo "<option value=\"{$ar}\">{$ar}</option>";
+	}
+
+	echo "</select></span>
+	<select name=\"mount_n\">";
+
+	$c=1;
+	if(!empty($_POST['mount_n'])) $mount_sel = $_POST['mount_n'];
+	else $mount_sel = $data_mas[1];
+	foreach($mass_mount as $ar) {
+		if($mount_sel == $c) echo "<option value=\"{$c}\" selected=\"selected\">{$ar}</option>";
+		else echo "<option value=\"{$c}\">{$ar}</option>";
+	$c++;
+	}
+
+	echo "</select></span>
+	<select name=\"year_n\">
+	<option value=\"2009\">2009</option>
+	<option value=\"2010\">2010</option>
+	<option value=\"2011\" selected=\"selected\">2011</option>
+	</select>
+<b>&nbsp;&nbsp;по :&nbsp;&nbsp;</b>
+			<select name=\"day_k\">";
+
+	if(!empty($_POST['day_k'])) $day_sel = $_POST['day_k'];
+	else $day_sel = $data_mas[2];
+	foreach($mass_day as $ar) {
+		if($day_sel == $ar)echo "<option value=\"{$ar}\" selected=\"selected\">{$ar}</option>";
+		else echo "<option value=\"{$ar}\">{$ar}</option>";
+	}
+
+	echo "</select></span>
+	<select name=\"mount_k\">";
+
+	$c=1;
+	if(!empty($_POST['mount_k'])) $mount_sel = $_POST['mount_k'];
+	else $mount_sel = $data_mas[1];
+	foreach($mass_mount as $ar) {
+		if($mount_sel == $c) echo "<option value=\"{$c}\" selected=\"selected\">{$ar}</option>";
+		else echo "<option value=\"{$c}\">{$ar}</option>";
+	$c++;
+	}
+
+	echo "</select></span>
+	<select name=\"year_k\">
+	<option value=\"2009\">2009</option>
+	<option value=\"2010\">2010</option>
+	<option value=\"2011\" selected=\"selected\">2011</option>
+	</select>
+<input type=\"submit\" name=lists value=Посмотреть />
+</form>";
+echo $res;
+?>
+
+</div>
