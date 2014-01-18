@@ -11,8 +11,14 @@ $error_did = true;
 if (!empty($_POST['change_status'])) {
 $db_pay_desk->demand_edit($_POST['status'],$_GET['did']);
 }
-if (!empty($_POST['search_pay'])) {$did = $_POST['did']; $error_did = false;}
-if (!empty($_GET['did'])) {$did = $_GET['did']; $error_did = false;}
+if (!empty($_POST['search_pay'])) {
+    $did = $_POST['did'];
+    $error_did = false;
+}
+if (!empty($_GET['did'])) {
+    $did = $_GET['did'];
+    $error_did = false;
+}
 /*
 if(!empty($_POST['autopay'])){
 	echo $mass_oper[$_POST['name_uslugi']];
@@ -197,7 +203,7 @@ echo"
 	<td width=\"50%\" align=\"left\" valign=middle>
 	<form method=\"post\" action=\"search_pay_d.aspx?did=$did\">";
 	echo "<select name=\"status\">";
-		echo sFormatData::getStatusList($info[0]["status"]);
+		echo swDemand::getStatusList($info[0]["status"]);
 	echo "</select>
 	<input type=\"submit\" name=\"change_status\" value=\"Изменить\"/><br /><br /></form>
 	<form method=\"post\" action=\"nncron/constructor_inpay.aspx?did=$did\">
