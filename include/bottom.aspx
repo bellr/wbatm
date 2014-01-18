@@ -1,1 +1,0 @@
-<img src="http://counter.pr-cy.ru/prcy/wm-rb.net" alt="PR-CY.ru" border="0" height="31" width="88">

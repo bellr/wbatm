@@ -33,73 +33,12 @@ $count_cash_dem_out_n = $db_pay_desk->count_cash_dem_out_n('n');
 $count_cash_dem_out_yn = $db_pay_desk->count_cash_dem_out('yn');
 $count_cash_dem_out_er = $db_pay_desk->count_cash_dem_out('er');
 
-        $data=$home_dir."online/online.dat";
-        $time=time();
-        $past_time=time()-600;
-
-        $readdata=fopen($data,"r") or die("Не могу открыть файл $data");
-        $data_array=file($data);
-        fclose($readdata);
-
-        if (getenv('HTTP_X_FORWARDED_FOR'))
-               $user = getenv('HTTP_X_FORWARDED_FOR');
-        else
-             $user = getenv('REMOTE_ADDR');
-
-        $d=count($data_array);
-        for($i=0;$i<$d;$i++)
-                {
-               list($live_user,$last_time)=explode("::","$data_array[$i]");
-               if($live_user!=""&&$last_time!=""):
-               if($last_time<$past_time):
-                        $live_user="";
-                        $last_time="";
-                endif;
-                if($live_user!=""&&$last_time!="")
-                        {
-                        if($user==$live_user)
-                                {
-                                $online_array[]="$user::$time\r\n";
-                                }
-                        else
-                                $online_array[]="$live_user::$last_time";
-                        }
-                endif;
-                }
-
-        if(isset($online_array)):
-        foreach($online_array as $i=>$str)
-                {
-                if($str=="$user::$time\r\n")
-                        {
-                        $ok=$i;
-                        break;
-                        }
-                }
-        foreach($online_array as $j=>$str)
-                {
-                if($ok==$j) { $online_array[$ok]="$user::$time\r\n"; break;}
-                }
-       endif;
-
-        $writedata=fopen($data,"w") or die("Не могу открыть файл $data");
-        flock($writedata,2);
-        if($online_array=="") $online_array[]="$user::$time\r\n";
-        foreach($online_array as $str)
-                fputs($writedata,"$str");
-        flock($writedata,3);
-        fclose($writedata);
-
-        $readdata=fopen($data,"r") or die("Не могу открыть файл $data");
-        $data_array=file($data);
-        fclose($readdata);
-        $online=count($data_array) - 1;
 
 ?>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta http-equiv="refresh" content="600; URL=http://atm.wm-rb.net/menu.aspx">
+<meta http-equiv="refresh" content="600; URL=menu.aspx">
 <meta content="none" name="ROBOTS">
 <link rel="stylesheet" href="style/style.css" type="text/css">
 </head>
@@ -113,7 +52,7 @@ if(id) id.style.display=id.style.display=='none'?'block':'none';
 
 <body text="#000000" bgcolor="#99ccff" topmargin="2">
 <center><input type="button" value="обновить" onClick=location.href="menu.aspx"><br />
-Online <? echo $online; ?>
+
 </center>
 <table width="100%" border="0" cellspacing="1" cellpadding="4" bgcolor="#FFFFFF">
   <tr>
@@ -132,7 +71,7 @@ Online <? echo $online; ?>
 	<a href="discount.aspx" target="mainFrame" class="en_b">Скидки</a><br />
 	<a href="stat_oper.aspx" target="mainFrame" class="en_b">Статистика операций</a> <a target="_blank" href="/content/?block=webmoney.wm_example&interface=x3">wm</a><br />
 	<a href="partner.aspx" target="mainFrame" class="en_b">Партнерка</a><br />
-	<a href="http://atm.wm-rb.net/partner_list.aspx" target="mainFrame" class="en_b">Список всех партнеров</a><br />
+	<a href="partner_list.aspx" target="mainFrame" class="en_b">Список всех партнеров</a><br />
 	</td>
   </tr>
 <tr>

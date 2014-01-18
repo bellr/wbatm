@@ -1,13 +1,14 @@
 <?php
 
 require("customsql.inc.aspx");
-$db = new CustomSQL($DBName);
-$db_exchange = new CustomSQL_exchange($DBName_exchange);
-$db_admin = new CustomSQL_admin($DBName_admin);
+
 $error_did = true;
 
 if (!empty($_POST['change_status'])) {
-$db_exchange->demand_edit($_POST['status'],$_GET['did']);
+
+    dataBase::DBexchange()->update('demand',array('status'=>$_POST['status']),array(
+        'did' => $_GET['did']
+    ));
 }
 if (!empty($_POST['search_ex'])) {$did = $_POST['did']; $error_did = false;}
 if (!empty($_GET['did'])) {$did = $_GET['did']; $error_did = false;}
@@ -121,7 +122,7 @@ echo"
 	<td width=\"50%\" align=\"left\" valign=middle>
 	<form method=\"post\" action=\"search_exch_d.aspx?did=$did\">";
 	echo "<select name=\"status\">";
-		echo sFormatData::getStatusList($info[0]["status"]);
+		echo swDemand::getStatusList($info[0]["status"]);
 	echo "</select>
 
 	<input type=\"submit\" name=\"change_status\" value=\"Изменить\"/><br /><br /></form>

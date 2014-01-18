@@ -9,7 +9,7 @@ class test extends Template {
         //echo self::direct_translation('17086291','05609781',trim(sprintf("%8.0f ",'1000000')),'1366445225');
 		//echo 'asdas';
 		//echo eEasyPay::direct_translation('17086291','05609781',trim(sprintf("%8.0f ",'1000000')),'1366445225');
-		echo gcCheckPayment::toEasyPay(array('purse_type'=>'EasyPay','in_val'=>100,'purse_in'=>'05609781','did'=>1366445225));
+		//echo gcCheckPayment::toEasyPay(array('purse_type'=>'EasyPay','in_val'=>100,'purse_in'=>'05609781','did'=>1366445225));
 		//echo $res;
 
         //return $this->vars;
@@ -19,10 +19,13 @@ class test extends Template {
 	
 	
 	public static function direct_translation($login,$purse,$summa,$did) {
-		$pass = Config::$wmBase[$login]['pass'];
-		$pp = Config::$wmBase[$login]['pay_pass'];
-	$headers = array
-	(   'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*;q=0.8',
+
+        $PP = Extension::Payments()->getParam('payments','easypay');
+		$pass = $PP->$login['pass'];
+		$pp = $PP->$login['pay_pass'];
+
+	$headers = array(
+        'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*;q=0.8',
 	    'Accept-Language: ru,en-us;q=0.7,en;q=0.3',
 	    'Accept-Encoding: deflate',
 	    'Accept-Charset: windows-1251,utf-8;q=0.7,*;q=0.7');

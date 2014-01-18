@@ -3,13 +3,14 @@
 define('PROJECT','ATM');
 define('VS_DEBUG',true);
 require_once("../../core/vs.php");
+$PP = Extension::Payments()->getParam('payments','webmoney');
 
 $P = inputData::init();
-echo Config::$wmBase['secret_key_merchant'];
+echo $PP->secret_key_merchant;
 vsLog::add((array)$P);
 vsLog::add($_POST['LMI_SECRET_KEY']);
-echo Config::$wmBase['secret_key_merchant'];
-if($P->LMI_SECRET_KEY == Config::$wmBase['secret_key_merchant']) {
+echo $PPsecret_key_merchant;
+if($P->LMI_SECRET_KEY == $PP->secret_key_merchant) {
 	
 	$P->did = '1375383710';
 	$demand_info = dataBase::DBexchange()->select('demand','ex_output,ex_input,out_val,in_val,purse_out,purse_in,email','where did="'.$P->did.'" and status="n"');
@@ -22,8 +23,8 @@ if($P->LMI_SECRET_KEY == Config::$wmBase['secret_key_merchant']) {
 	$purse_in = $ar['purse_in'] = $demand_info[0]["purse_in"];
 	$email = $demand_info[0]["email"];
 
-	$wmBase = Config::$wmBase;
-	$work_wmid_wmid = $wmBase[Config::$wmBase['default_wmid']];
+	$wmBase = $PP;
+	$work_wmid_wmid = $wmBase[$PP->default_wmid];
 	$sel_purse_out = $wmBase[$work_wmid_wmid][$demand_info[0]['ex_output']];
 	
 //	echo Config::$wmBase[$demand_info[0]['ex_output']]
@@ -34,10 +35,14 @@ if($P->LMI_SECRET_KEY == Config::$wmBase['secret_key_merchant']) {
 
 	
 	//$db_exchange->update_purse_out($_POST['did'],$_POST['LMI_PAYER_PURSE']);
-	dataBase::DBexchange()->update('demand',array('purse_out' => $P->LMI_PAYER_PURSE, 'status' =>'yn'),'where did='.$P->did);
+	dataBase::DBexchange()->update('demand',array('purse_out' => $P->LMI_PAYER_PURSE, 'status' =>'yn'),array(
+        'did' => $P->did
+    ));
 	//$sql = "update demand set purse_out='$purse' where did='$did'";
 	
-	$id_pay = dataBase::DBadmin()->update('id_payment',array('more_idpay' => $P->LMI_SYS_TRANS_NO),'where id_pay='.$P->LMI_PAYMENT_NO);
+	$id_pay = dataBase::DBadmin()->update('id_payment',array('more_idpay' => $P->LMI_SYS_TRANS_NO),array(
+        'id_pay' => $P->LMI_PAYMENT_NO
+    ));
 	$ar['id_pay'] = $id_pay[0]['id_pay'];
 	$ar['more_idpay'] = $P->LMI_SYS_TRANS_NO;
 	$ar['direct'] = $ex_output.'_'.$ar['ex_input'];
@@ -65,9 +70,9 @@ if($P->LMI_SECRET_KEY == Config::$wmBase['secret_key_merchant']) {
 		
 		
 	} else {
-		dataBase::DBexchange()->update('demand',array('coment' => 'В процессе обмена были изменены параметры заявки. Сообщите администрации Обменного пункта, завка будет исполнена в ручном режиме после проверки', 'status' =>'er'),'where did='.$P->did);
+		dataBase::DBexchange()->update('demand',array('coment' => 'пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ', 'status' =>'er'),'where did='.$P->did);
 	
-		//$db_exchange->demand_add_coment('В процессе обмена были изменены параметры заявки. Сообщите администрации Обменного пункта, завка будет исполнена в ручном режиме после проверки',$_POST['did']);
+		//$db_exchange->demand_add_coment('пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ',$_POST['did']);
 		//$sql = "update demand set coment='$coment' where did='$did'";
 		
 		//$db_exchange->demand_edit('er',$_POST['did']);
@@ -87,8 +92,8 @@ $db_pay_desk = new CustomSQL_pay_desk($DBName_pay_desk);
 
 if($_POST['LMI_SECRET_KEY'] == "Dbnfkbq1986") {
 	if(!empty($_POST['ex_wm'])) {
-//обработка обмена валют
-//вывод инфы по заявке
+//пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
+//пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 	$demand_info = $db_exchange->demand_check($_POST['did'],'n');
 	$ex_output = $demand_info[0]["ex_output"];
 	$ex_input = $demand_info[0]["ex_input"];
@@ -98,7 +103,7 @@ if($_POST['LMI_SECRET_KEY'] == "Dbnfkbq1986") {
 	$purse_in = $demand_info[0]["purse_in"];
 	$email = $demand_info[0]["email"];
 
-//вывод кошелька
+//пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 $sel_purse_out = $db_exchange->sel_purse_out($ex_output);
 
 	$md5_demand = md5($ex_output.$ex_input.$out_val.$in_val.$sel_purse_out[0]['purse'].$purse_in);
@@ -117,7 +122,7 @@ $sel_purse_out = $db_exchange->sel_purse_out($ex_output);
 
 		check_payment($_POST['ex_input'],$purse_in,$in_val,$desc_pay,$_POST['did'],$_POST['LMI_PAYMENT_NO'],'exchange',$ex_output.'_'.$ex_input);
 	}
-	else {$db_exchange->demand_add_coment('В процессе обмена были изменены параметры заявки. Сообщите администрации Обменного пункта, завка будет исполнена в ручном режиме после проверки',$_POST['did']);
+	else {$db_exchange->demand_add_coment('пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ',$_POST['did']);
 	$db_exchange->demand_edit('er',$_POST['did']); }
 	}
 
@@ -127,18 +132,18 @@ $sel_purse_out = $db_exchange->sel_purse_out($ex_output);
 	
 	
 	
-//ОБРАБОТКА ПЛАТЕЖЕЙ ЗА УСЛУГИ
+//пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 	elseif(!empty($_POST['usluga_wm'])) {
-//обработка оплаты услуг
+//пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
 $sel_idpay_did = $db_admin->sel_idpay_did($_POST['LMI_PAYMENT_NO']);
 $db_admin->add_more_idpay($_POST['LMI_SYS_TRANS_NO'],$_POST['LMI_PAYMENT_NO']);
-//вывод инфы по заявке
+//пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 	$demand_info = $db_pay_desk->demand_check($sel_idpay_did[0]['did']);
 	$output = $demand_info[0]["output"];
 	$out_val = $demand_info[0]["out_val"];
 	$in_val = $demand_info[0]["in_val"];
 		if(!empty($demand_info)) {
-//вывод кошелька
+//пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 $sel_purse_out = $db_exchange->sel_purse_out_service($output);
 	if (!empty($_POST['LMI_HASH'])) {
 		$md5_demand = md5($output.$out_val.$in_val.$sel_purse_out[0]['purse']);
@@ -157,24 +162,24 @@ $str = $sel_idpay_did[0]['did']." ".$_POST['output']." ".$demand_info[0]['name_u
 */
 		check_pay_uslugi($sel_idpay_did[0]['did'],$_POST['output'],$demand_info[0]['name_uslugi'],$in_val,$out_val,$demand_info[0]['pole1'],$demand_info[0]['pole2']);
 	}
-	else { $db_pay_desk->demand_add_coment('В процессе обмена были изменены параметры заявки. Сообщите администрации Обменного пункта, завка будет исполнена в ручном режиме после проверки',$sel_idpay_did[0]['did']);
+	else { $db_pay_desk->demand_add_coment('пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ',$sel_idpay_did[0]['did']);
 	$db_pay_desk->demand_edit('er',$sel_idpay_did[0]['did']);}
 	}
-	else { $db_pay_desk->demand_add_coment('Не верное значение в контрольной подписи',$sel_idpay_did[0]['did']);
+	else { $db_pay_desk->demand_add_coment('пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ',$sel_idpay_did[0]['did']);
 	$db_pay_desk->demand_edit('er',$sel_idpay_did[0]['did']);}
 		}
 	}
 
-/////////////////////////////////////////////////////////////////обработка пополнения карты
+/////////////////////////////////////////////////////////////////пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
 	elseif(!empty($_POST['output_NAL'])) {
-//вывод инфы по заявке
+//пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 	$sel_idpay_did = $db_admin->sel_idpay_did($_POST['LMI_PAYMENT_NO']);
 	$demand_info = $db_pay_desk->demand_check_out($sel_idpay_did[0]['did'],'n');
 	$db_admin->add_more_idpay($_POST['LMI_SYS_TRANS_NO'],$_POST['LMI_PAYMENT_NO']);
 	$db_pay_desk->dem_edit_output('yn',$sel_idpay_did[0]['did']);
-	//пополнение баланса
+	//пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 	$db_exchange->increase_bal($demand_info[0]["in_val"],$_POST['output']);
-//вывод кошелька
+//пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 $sel_purse_out = $db_exchange->sel_purse_out($demand_info[0]["output"]);
 	$md5_demand = md5($demand_info[0]["output"].$demand_info[0]["in_val"].$demand_info[0]["out_val"].$sel_purse_out[0]['purse']);
 	$md5_merchant = md5($_POST['output'].$_POST['LMI_PAYMENT_AMOUNT'].$_POST['in_val'].$_POST['LMI_PAYEE_PURSE']);
@@ -186,9 +191,9 @@ $sel_purse_out = $db_exchange->sel_purse_out($demand_info[0]["output"]);
 output_NAL($sel_idpay_did[0]['did'],$_POST['output'],$demand_info[0]["out_val"],$demand_info[0]['name_card'],$demand_info[0]['card'],$_POST['LMI_PAYMENT_NO'],$demand_info[0]["period"]);
 exit();
 					}
-					else {$db_pay_desk->dem_coment_output('Баланс обмениваемой валюты уменьшился в процессе обмена. Сообщите администрации.',$sel_idpay_did[0]['did']); $db_pay_desk->dem_edit_output('er',$sel_idpay_did[0]['did']);}
+					else {$db_pay_desk->dem_coment_output('пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.',$sel_idpay_did[0]['did']); $db_pay_desk->dem_edit_output('er',$sel_idpay_did[0]['did']);}
 	}
-	else { $db_pay_desk->dem_coment_output('В процессе обмена были изменены параметры заявки. Сообщите администрации Обменного пункта, завка будет исполнена в ручном режиме после проверки',$sel_idpay_did[0]['did']);
+	else { $db_pay_desk->dem_coment_output('пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ',$sel_idpay_did[0]['did']);
 	$db_pay_desk->dem_edit_output('er',$sel_idpay_did[0]['did']);}
 	}
 
@@ -197,9 +202,9 @@ elseif(!empty($_POST['pay_shop'])) {
 	include("xml/wmxiparser.php");
 	$parser = new WMXIParser();
 
-//обработка оплаты услуг
+//пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
 $sel_idpay_did = $db_admin->sel_idpay_did($_POST['LMI_PAYMENT_NO']);
-//вывод инфы по заявке
+//пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 	$demand_info = $db_pay_desk->demand_check($sel_idpay_did[0]['did']);
 	$output = $demand_info[0]["output"];
 	$name_shop = $demand_info[0]["name_uslugi"];
@@ -210,18 +215,18 @@ if($demand_info[0]["status"] != "y") {
 	if (!empty($_POST['LMI_HASH'])) {
 $db_pay_desk->demand_edit('yn',$sel_idpay_did[0]['did']);
 
-//вывод инфы по shopу
+//пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅ shopпїЅ
 $sel_shop = $db->sel_shop($name_shop);
-//пополнение баланса
+//пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 	$exch_balance = $db_exchange->exch_balance_service($output);
 	$bal_in = $exch_balance[0]['balance'] + $out_val;
 	$db_exchange->demand_update_bal_service($bal_in,$output);
 
-//оплата на кошелек партнера
+//пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 //$exch_balance = $db_exchange->exch_balance('WMB');
 $sum_tranz = $in_val - $in_val * $sel_shop[0]['percent'];
 
-///!!!!!!!!!!!!!!!Отправка запроса
+///!!!!!!!!!!!!!!!пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 $send_summ = explode('.',$demand_info[0]['out_val']);
 $sig = md5("230113050722009:".$demand_info[0]['pole1'].":".$send_summ['0']);
 $postfields = "n_order=".$demand_info[0]['pole1']."&out_val=".$send_summ['0']."&email=".$demand_info[0]['email']."&data_pay=".$demand_info[0]['data']."&time_pay=".$demand_info[0]['time']."&sig=".$sig;
@@ -234,25 +239,25 @@ curl_setopt($ch, CURLOPT_POST,1);
 curl_setopt($ch, CURLOPT_NOBODY, false);
 curl_setopt($ch, CURLOPT_POSTFIELDS, $postfields);
 curl_exec($ch);
-///!!!!!!!!!!!!!!!Отправка запроса
+///!!!!!!!!!!!!!!!пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 
-$desc_pay = "Оплата по заказу №".$demand_info[0]['pole1'].", ID".$sel_idpay_did[0]['did'];
+$desc_pay = "пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ".$demand_info[0]['pole1'].", ID".$sel_idpay_did[0]['did'];
 
 	$response = $wmxi->X2(
-			$_POST['LMI_PAYMENT_NO'],    # номер перевода в системе учета отправителя; любое целое число без знака, должно быть уникальным
-			'B146213360627',          # номер кошелька с которого выполняется перевод (отправитель)
-			$sel_shop[0]['purse'],         # номер кошелька, но который выполняется перевод B144877377115 (получатель)
-			$sum_tranz,  # число с плавающей точкой без незначащих символов
-			'0',    # целое от 0 до 255 символов; 0 - без протекции
-			'',       # произвольная строка от 0 до 255 символов; пробелы в начале или конце не допускаются
-			trim($desc_pay),        # произвольная строка от 0 до 255 символов; пробелы в начале или конце не допускаются
-			'0',    # целое число > 0; если 0 - перевод не по счету
-			intval('0')    # если 0 – перевод будет выполняться без учета разрешает ли получатель перевод; 1 – перевод будет выполняться только если получатель разрешает перевод (в противном случае код возврата – 35)
+			$_POST['LMI_PAYMENT_NO'],    # пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ; пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+			'B146213360627',          # пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ)
+			$sel_shop[0]['purse'],         # пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ B144877377115 (пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ)
+			$sum_tranz,  # пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+			'0',    # пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ 0 пїЅпїЅ 255 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ; 0 - пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+			'',       # пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ 0 пїЅпїЅ 255 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ; пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+			trim($desc_pay),        # пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ 0 пїЅпїЅ 255 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ; пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+			'0',    # пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ > 0; пїЅпїЅпїЅпїЅ 0 - пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
+			intval('0')    # пїЅпїЅпїЅпїЅ 0 пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ; 1 пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ (пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ 35)
 		);
 		$structure = $parser->Parse($response, DOC_ENCODING);
 		$transformed = $parser->Reindex($structure, true);
 		$kod_error = htmlspecialchars(@$transformed["w3s.response"]["retval"], ENT_QUOTES);
-//echo "Ошибка - ".$kod_error;
+//echo "пїЅпїЅпїЅпїЅпїЅпїЅ - ".$kod_error;
 
 
 		if ($kod_error == "0") {
@@ -260,23 +265,23 @@ $desc_pay = "Оплата по заказу №".$demand_info[0]['pole1'].", ID".$sel_idpay_did[
 $db_pay_desk->demand_edit('y',$sel_idpay_did[0]['did']);
 		}
 		else {
-			$db_pay_desk->demand_add_coment('В связи с техническими неполадками, заявка была совершена некорректно. Сообщите администрации. ERROR='.$kod_error,$sel_idpay_did[0]['did']);}
+			$db_pay_desk->demand_add_coment('пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ. ERROR='.$kod_error,$sel_idpay_did[0]['did']);}
 
 	}
-	else { $db_pay_desk->dem_coment_output('Не верное значение в контрольной подписи',$sel_idpay_did[0]['did']);
+	else { $db_pay_desk->dem_coment_output('пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ',$sel_idpay_did[0]['did']);
 	$db_pay_desk->demand_edit('er',$sel_idpay_did[0]['did']);}
 }
 
 }
 /*
 
-///////////////////////////Обработка платежа из системы автоматической оплаты
+///////////////////////////пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 if(!empty($_POST['auto_processing'])) {
-//обработка оплаты услуг
+//пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
 $sel_idpay_did = $db_admin->sel_idpay_did($_POST['LMI_PAYMENT_NO']);
-//вывод инфы по заявке
+//пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 	$demand_info = $db->demand_check($sel_idpay_did[0]['did']);
-//вывод кошелька
+//пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 $sel_purse_out = $db_exchange->sel_purse_out_service($demand_info[0]["oplata"]);
 	if (!empty($_POST['LMI_HASH'])) {
 		$md5_demand = md5($demand_info[0]["oplata"].$demand_info[0]["summa_pay"].$sel_purse_out[0]['purse']);
@@ -286,12 +291,12 @@ $sel_purse_out = $db_exchange->sel_purse_out_service($demand_info[0]["oplata"]);
 				$add_amount = $remainder[0]['remainder'] + $demand_info[0]["summa"];
 				$db->remainder_null($demand_info[0]["terminal"]);
 				$db->upd_summa($add_amount,$sel_idpay_did[0]['did']);
-				//пополнение баланса
+				//пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 				$exch_balance = $db_exchange->exch_balance_service($demand_info[0]["oplata"]);
 				$bal_in = $exch_balance[0]['balance'] + $demand_info[0]["summa_pay"];
 				$db_exchange->demand_update_bal_service($bal_in,$demand_info[0]["oplata"]);
 				$db->st_edit('yn',$sel_idpay_did[0]['did']);
-//читаем баланс B кошелька
+//пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ B пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 	include("xml/conf.php");
 	include("xml/wmxiparser.php");
 	$parser = new WMXIParser();
@@ -301,19 +306,19 @@ $sel_purse_out = $db_exchange->sel_purse_out_service($demand_info[0]["oplata"]);
 	for ($i=0; $i<=20; $i++) {
 		if ($xmlres->purses->purse[$i]->pursename == 'B580416608371') {$balance_in = $xmlres->purses->purse[$i]->amount - $xmlres->purses->purse[$i]->amount*0.008; break;}
 	}
-//читаем баланс B кошелька
+//пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ B пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 	}
-	else { $db->add_comment('В процессе обмена были изменены параметры заявки. Сообщите администрации Обменного пункта, завка будет исполнена в ручном режиме после проверки',$sel_idpay_did[0]['did']);
+	else { $db->add_comment('пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ',$sel_idpay_did[0]['did']);
 	$db->st_edit('er',$sel_idpay_did[0]['did']);}
 		}
-	else { $db->add_comment('Не верное значение в контрольной подписи',$sel_idpay_did[0]['did']);
+	else { $db->add_comment('пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ',$sel_idpay_did[0]['did']);
 	$db->st_edit('er',$sel_idpay_did[0]['did']);}
 }
 */
 elseif(!empty($_POST['shop_pay'])) {
-//обработка оплаты услуг
+//пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
 $sel_idpay_did = $db_admin->sel_idpay_did($_POST['LMI_PAYMENT_NO']);
-//вывод инфы по заявке
+//пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 	$demand_info = $db_pay_desk->demand_check_eshop($sel_idpay_did[0]['did']);
 	$purse = $db_exchange->sel_purse_shop($demand_info[0]["output"]);
 	$hesh = md5("keyok16201Dbnfkbq1987x986dbnfkbq19864-_=&^%$#@".$_POST['LMI_PAYMENT_NO'].$_POST['LMI_PAYMENT_AMOUNT'].$purse[0]['purse'].$demand_info[0]["output"]."keyok16201Dbnfkbq1987x986dbnfkbq19864-_=&^%$#@");
@@ -321,14 +326,14 @@ $sel_idpay_did = $db_admin->sel_idpay_did($_POST['LMI_PAYMENT_NO']);
 			$info_goods = $db_pay_desk->sel_goods_price($demand_info[0]["id_goods"]);
 $s = e_shop($sel_idpay_did[0]["did"],$demand_info[0]["email"],$info_goods[0]["name_card"],$demand_info[0]["amount"],$demand_info[0]["output"],$demand_info[0]["id_goods"],$demand_info[0]["type_goods"],$demand_info[0]["data"],$demand_info[0]["time"]);
 
-if($s == "ERROR_SELGOODS") {$db_pay_desk->add_coment_eshop('Не выбран товар из базы данных. Администрация оповещена об ошибке.',$sel_idpay_did[0]['did']);	$db_pay_desk->demand_edit_eshop('er',$sel_idpay_did[0]['did']);}
+if($s == "ERROR_SELGOODS") {$db_pay_desk->add_coment_eshop('пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.',$sel_idpay_did[0]['did']);	$db_pay_desk->demand_edit_eshop('er',$sel_idpay_did[0]['did']);}
 else {$db_pay_desk->demand_edit_eshop('y',$sel_idpay_did[0]['did']);
 	if(!empty($demand_info[0]["diskont_id"])) {
 		$sel_diskont = $db_pay_desk->search_diskont($demand_info[0]["diskont_id"]);	$db_pay_desk->upd_diskont($demand_info[0]["diskont_id"],$info_goods[0]["price"]-$info_goods[0]["price"]*$sel_diskont[0]['procent']/100);
 	}
 }
 		}
-		else {$db_pay_desk->add_coment_eshop('Неверная подпись. Администрация оповещена об ошибке.',$sel_idpay_did[0]['did']);
+		else {$db_pay_desk->add_coment_eshop('пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.',$sel_idpay_did[0]['did']);
 		$db_pay_desk->demand_edit_eshop('er',$sel_idpay_did[0]['did']);
 		}
 }

@@ -1,8 +1,10 @@
 <?
+
 define('PROJECT','ATM');
+define('PROJECT_ROOT',dirname(__FILE__));
 define('VS_DEBUG',true);
 
-require_once(dirname($_SERVER['DOCUMENT_ROOT'])."/core/vs.php");
+require_once(dirname(PROJECT_ROOT)."/core/vs.php");
 
 $P = inputData::init();
 if(isset($P->process)) {

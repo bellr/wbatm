@@ -1,308 +1,308 @@
 <?
-//ôóíêöèÿ îáðàáîòêè ïëàòåæà ïàðòíåðà(îòïðàâêà çàïðîñà íà ñåðâèñ è âûïëàòû)
+//Ñ„ÑƒÐ½ÐºÑ†Ð¸Ñ Ð¾Ð±Ñ€Ð°Ð±Ð¾Ñ‚ÐºÐ¸ Ð¿Ð»Ð°Ñ‚ÐµÐ¶Ð° Ð¿Ð°Ñ€Ñ‚Ð½ÐµÑ€Ð°(Ð¾Ñ‚Ð¿Ñ€Ð°Ð²ÐºÐ° Ð·Ð°Ð¿Ñ€Ð¾ÑÐ° Ð½Ð° ÑÐµÑ€Ð²Ð¸Ñ Ð¸ Ð²Ñ‹Ð¿Ð»Ð°Ñ‚Ñ‹)
 function shop_new($did,$in_val,$out_val,$output,$name_shop) {
-	include("xml/conf.php");
-	include("xml/wmxiparser.php");
-	$parser = new WMXIParser();
-	$db = new CustomSQL($DBName);
-	$db_exchange = new CustomSQL_exchange($DBName_exchange);
-	$db_pay_desk = new CustomSQL_pay_desk($DBName_pay_desk);
-	$db_admin = new CustomSQL_admin($DBName_admin);
-//âûâîä äàííûõ ïî çàÿâêå
-	$demand_info = $db_pay_desk->demand_check($did);
-//âûâîä íîìåðà òðàíçàêöèè ïî íîìåðó çàÿâêè
-	$sel_idpay = $db_admin->sel_idpay($did);
-//ïîïîëíåíèå áàëàíñà
-	$exch_balance = $db_exchange->exch_balance($output);
-	//$bal_in = $exch_balance[0]['balance'] + $in_val;
-	$db_exchange->demand_update_bal($exch_balance[0]['balance'] + $in_val,$output);
-//âûâîä èíôû ïî ìàãàçèíó
-	$sel_shop = $db->autoPay_shop($name_shop);
-//âûâîä êîøåëüêà
-	$sel_purse_out = $db_exchange->sel_purse_out('WMB');
-//îïëàòà íà êîøåëåê ïàðòíåðà
-	$sum_tranz = $out_val - $out_val * $sel_shop[0]['percent'];
+    include("xml/conf.php");
+    include("xml/wmxiparser.php");
+    $parser = new WMXIParser();
+    $db = new CustomSQL($DBName);
+    $db_exchange = new CustomSQL_exchange($DBName_exchange);
+    $db_pay_desk = new CustomSQL_pay_desk($DBName_pay_desk);
+    $db_admin = new CustomSQL_admin($DBName_admin);
+//Ð²Ñ‹Ð²Ð¾Ð´ Ð´Ð°Ð½Ð½Ñ‹Ñ… Ð¿Ð¾ Ð·Ð°ÑÐ²ÐºÐµ
+    $demand_info = $db_pay_desk->demand_check($did);
+//Ð²Ñ‹Ð²Ð¾Ð´ Ð½Ð¾Ð¼ÐµÑ€Ð° Ñ‚Ñ€Ð°Ð½Ð·Ð°ÐºÑ†Ð¸Ð¸ Ð¿Ð¾ Ð½Ð¾Ð¼ÐµÑ€Ñƒ Ð·Ð°ÑÐ²ÐºÐ¸
+    $sel_idpay = $db_admin->sel_idpay($did);
+//Ð¿Ð¾Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ðµ Ð±Ð°Ð»Ð°Ð½ÑÐ°
+    $exch_balance = $db_exchange->exch_balance($output);
+    //$bal_in = $exch_balance[0]['balance'] + $in_val;
+    $db_exchange->demand_update_bal($exch_balance[0]['balance'] + $in_val,$output);
+//Ð²Ñ‹Ð²Ð¾Ð´ Ð¸Ð½Ñ„Ñ‹ Ð¿Ð¾ Ð¼Ð°Ð³Ð°Ð·Ð¸Ð½Ñƒ
+    $sel_shop = $db->autoPay_shop($name_shop);
+//Ð²Ñ‹Ð²Ð¾Ð´ ÐºÐ¾ÑˆÐµÐ»ÑŒÐºÐ°
+    $sel_purse_out = $db_exchange->sel_purse_out('WMB');
+//Ð¾Ð¿Ð»Ð°Ñ‚Ð° Ð½Ð° ÐºÐ¾ÑˆÐµÐ»ÐµÐº Ð¿Ð°Ñ€Ñ‚Ð½ÐµÑ€Ð°
+    $sum_tranz = $out_val - $out_val * $sel_shop[0]['percent'];
 
-///!!!!!!!!!!!!!!!Îòïðàâêà çàïðîñà
-$send_summ = explode('.',$demand_info[0]['out_val']);
-$sig = md5("230113050722009:".$demand_info[0]['pole1'].":".$send_summ['0']);
-$postfields = "n_order=".$demand_info[0]['pole1']."&out_val=".$send_summ['0']."&email=".$demand_info[0]['email']."&data_pay=".$demand_info[0]['data']."&time_pay=".$demand_info[0]['time']."&sig=".$sig;
+///!!!!!!!!!!!!!!!ÐžÑ‚Ð¿Ñ€Ð°Ð²ÐºÐ° Ð·Ð°Ð¿Ñ€Ð¾ÑÐ°
+    $send_summ = explode('.',$demand_info[0]['out_val']);
+    $sig = md5("230113050722009:".$demand_info[0]['pole1'].":".$send_summ['0']);
+    $postfields = "n_order=".$demand_info[0]['pole1']."&out_val=".$send_summ['0']."&email=".$demand_info[0]['email']."&data_pay=".$demand_info[0]['data']."&time_pay=".$demand_info[0]['time']."&sig=".$sig;
 
-$ch = curl_init();
-curl_setopt($ch, CURLOPT_URL, $sel_shop[0]['refresh_url']);
-curl_setopt($ch, CURLOPT_HEADER, 0);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
-curl_setopt($ch, CURLOPT_POST,1);
-curl_setopt($ch, CURLOPT_NOBODY, false);
-curl_setopt($ch, CURLOPT_POSTFIELDS, $postfields);
-$res = curl_exec($ch);
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $sel_shop[0]['refresh_url']);
+    curl_setopt($ch, CURLOPT_HEADER, 0);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
+    curl_setopt($ch, CURLOPT_POST,1);
+    curl_setopt($ch, CURLOPT_NOBODY, false);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $postfields);
+    $res = curl_exec($ch);
 
-///!!!!!!!!!!!!!!!Îòïðàâêà çàïðîñà
-	$desc_pay = "Îïëàòà ïî çàêàçó ¹".$demand_info[0]['pole1'].", ID".$did;
-	if(preg_match("/OK+/i",$res)) {
+///!!!!!!!!!!!!!!!ÐžÑ‚Ð¿Ñ€Ð°Ð²ÐºÐ° Ð·Ð°Ð¿Ñ€Ð¾ÑÐ°
+    $desc_pay = "ÐžÐ¿Ð»Ð°Ñ‚Ð° Ð¿Ð¾ Ð·Ð°ÐºÐ°Ð·Ñƒ â„–".$demand_info[0]['pole1'].", ID".$did;
+    if(preg_match("/OK+/i",$res)) {
 
-	$response = $wmxi->X2(
-			intval($sel_idpay[0]['id_pay']),    # íîìåð ïåðåâîäà â ñèñòåìå ó÷åòà îòïðàâèòåëÿ; ëþáîå öåëîå ÷èñëî áåç çíàêà, äîëæíî áûòü óíèêàëüíûì
-			'B146213360627',          # íîìåð êîøåëüêà ñ êîòîðîãî âûïîëíÿåòñÿ ïåðåâîä (îòïðàâèòåëü)
-			$sel_shop[0]['purse'],         # íîìåð êîøåëüêà, íî êîòîðûé âûïîëíÿåòñÿ ïåðåâîä B144877377115 (ïîëó÷àòåëü)
-			$sum_tranz,  # ÷èñëî ñ ïëàâàþùåé òî÷êîé áåç íåçíà÷àùèõ ñèìâîëîâ
-			'0',    # öåëîå îò 0 äî 255 ñèìâîëîâ; 0 - áåç ïðîòåêöèè
-			'',       # ïðîèçâîëüíàÿ ñòðîêà îò 0 äî 255 ñèìâîëîâ; ïðîáåëû â íà÷àëå èëè êîíöå íå äîïóñêàþòñÿ
-			trim($desc_pay),        # ïðîèçâîëüíàÿ ñòðîêà îò 0 äî 255 ñèìâîëîâ; ïðîáåëû â íà÷àëå èëè êîíöå íå äîïóñêàþòñÿ
-			'0',    # öåëîå ÷èñëî > 0; åñëè 0 - ïåðåâîä íå ïî ñ÷åòó
-			'1'    # åñëè 0 – ïåðåâîä áóäåò âûïîëíÿòüñÿ áåç ó÷åòà ðàçðåøàåò ëè ïîëó÷àòåëü ïåðåâîä; 1 – ïåðåâîä áóäåò âûïîëíÿòüñÿ òîëüêî åñëè ïîëó÷àòåëü ðàçðåøàåò ïåðåâîä (â ïðîòèâíîì ñëó÷àå êîä âîçâðàòà – 35)
-		);
-		$structure = $parser->Parse($response, DOC_ENCODING);
-		$transformed = $parser->Reindex($structure, true);
-		$kod_error = htmlspecialchars(@$transformed["w3s.response"]["retval"], ENT_QUOTES);
-//echo "Îøèáêà - ".$kod_error;
+        $response = $wmxi->X2(
+            intval($sel_idpay[0]['id_pay']),    # Ð½Ð¾Ð¼ÐµÑ€ Ð¿ÐµÑ€ÐµÐ²Ð¾Ð´Ð° Ð² ÑÐ¸ÑÑ‚ÐµÐ¼Ðµ ÑƒÑ‡ÐµÑ‚Ð° Ð¾Ñ‚Ð¿Ñ€Ð°Ð²Ð¸Ñ‚ÐµÐ»Ñ; Ð»ÑŽÐ±Ð¾Ðµ Ñ†ÐµÐ»Ð¾Ðµ Ñ‡Ð¸ÑÐ»Ð¾ Ð±ÐµÐ· Ð·Ð½Ð°ÐºÐ°, Ð´Ð¾Ð»Ð¶Ð½Ð¾ Ð±Ñ‹Ñ‚ÑŒ ÑƒÐ½Ð¸ÐºÐ°Ð»ÑŒÐ½Ñ‹Ð¼
+            'B146213360627',          # Ð½Ð¾Ð¼ÐµÑ€ ÐºÐ¾ÑˆÐµÐ»ÑŒÐºÐ° Ñ ÐºÐ¾Ñ‚Ð¾Ñ€Ð¾Ð³Ð¾ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÑÐµÑ‚ÑÑ Ð¿ÐµÑ€ÐµÐ²Ð¾Ð´ (Ð¾Ñ‚Ð¿Ñ€Ð°Ð²Ð¸Ñ‚ÐµÐ»ÑŒ)
+            $sel_shop[0]['purse'],         # Ð½Ð¾Ð¼ÐµÑ€ ÐºÐ¾ÑˆÐµÐ»ÑŒÐºÐ°, Ð½Ð¾ ÐºÐ¾Ñ‚Ð¾Ñ€Ñ‹Ð¹ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÑÐµÑ‚ÑÑ Ð¿ÐµÑ€ÐµÐ²Ð¾Ð´ B144877377115 (Ð¿Ð¾Ð»ÑƒÑ‡Ð°Ñ‚ÐµÐ»ÑŒ)
+            $sum_tranz,  # Ñ‡Ð¸ÑÐ»Ð¾ Ñ Ð¿Ð»Ð°Ð²Ð°ÑŽÑ‰ÐµÐ¹ Ñ‚Ð¾Ñ‡ÐºÐ¾Ð¹ Ð±ÐµÐ· Ð½ÐµÐ·Ð½Ð°Ñ‡Ð°Ñ‰Ð¸Ñ… ÑÐ¸Ð¼Ð²Ð¾Ð»Ð¾Ð²
+            '0',    # Ñ†ÐµÐ»Ð¾Ðµ Ð¾Ñ‚ 0 Ð´Ð¾ 255 ÑÐ¸Ð¼Ð²Ð¾Ð»Ð¾Ð²; 0 - Ð±ÐµÐ· Ð¿Ñ€Ð¾Ñ‚ÐµÐºÑ†Ð¸Ð¸
+            '',       # Ð¿Ñ€Ð¾Ð¸Ð·Ð²Ð¾Ð»ÑŒÐ½Ð°Ñ ÑÑ‚Ñ€Ð¾ÐºÐ° Ð¾Ñ‚ 0 Ð´Ð¾ 255 ÑÐ¸Ð¼Ð²Ð¾Ð»Ð¾Ð²; Ð¿Ñ€Ð¾Ð±ÐµÐ»Ñ‹ Ð² Ð½Ð°Ñ‡Ð°Ð»Ðµ Ð¸Ð»Ð¸ ÐºÐ¾Ð½Ñ†Ðµ Ð½Ðµ Ð´Ð¾Ð¿ÑƒÑÐºÐ°ÑŽÑ‚ÑÑ
+            trim($desc_pay),        # Ð¿Ñ€Ð¾Ð¸Ð·Ð²Ð¾Ð»ÑŒÐ½Ð°Ñ ÑÑ‚Ñ€Ð¾ÐºÐ° Ð¾Ñ‚ 0 Ð´Ð¾ 255 ÑÐ¸Ð¼Ð²Ð¾Ð»Ð¾Ð²; Ð¿Ñ€Ð¾Ð±ÐµÐ»Ñ‹ Ð² Ð½Ð°Ñ‡Ð°Ð»Ðµ Ð¸Ð»Ð¸ ÐºÐ¾Ð½Ñ†Ðµ Ð½Ðµ Ð´Ð¾Ð¿ÑƒÑÐºÐ°ÑŽÑ‚ÑÑ
+            '0',    # Ñ†ÐµÐ»Ð¾Ðµ Ñ‡Ð¸ÑÐ»Ð¾ > 0; ÐµÑÐ»Ð¸ 0 - Ð¿ÐµÑ€ÐµÐ²Ð¾Ð´ Ð½Ðµ Ð¿Ð¾ ÑÑ‡ÐµÑ‚Ñƒ
+            '1'    # ÐµÑÐ»Ð¸ 0 â€“ Ð¿ÐµÑ€ÐµÐ²Ð¾Ð´ Ð±ÑƒÐ´ÐµÑ‚ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÑÑ‚ÑŒÑÑ Ð±ÐµÐ· ÑƒÑ‡ÐµÑ‚Ð° Ñ€Ð°Ð·Ñ€ÐµÑˆÐ°ÐµÑ‚ Ð»Ð¸ Ð¿Ð¾Ð»ÑƒÑ‡Ð°Ñ‚ÐµÐ»ÑŒ Ð¿ÐµÑ€ÐµÐ²Ð¾Ð´; 1 â€“ Ð¿ÐµÑ€ÐµÐ²Ð¾Ð´ Ð±ÑƒÐ´ÐµÑ‚ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÑÑ‚ÑŒÑÑ Ñ‚Ð¾Ð»ÑŒÐºÐ¾ ÐµÑÐ»Ð¸ Ð¿Ð¾Ð»ÑƒÑ‡Ð°Ñ‚ÐµÐ»ÑŒ Ñ€Ð°Ð·Ñ€ÐµÑˆÐ°ÐµÑ‚ Ð¿ÐµÑ€ÐµÐ²Ð¾Ð´ (Ð² Ð¿Ñ€Ð¾Ñ‚Ð¸Ð²Ð½Ð¾Ð¼ ÑÐ»ÑƒÑ‡Ð°Ðµ ÐºÐ¾Ð´ Ð²Ð¾Ð·Ð²Ñ€Ð°Ñ‚Ð° â€“ 35)
+        );
+        $structure = $parser->Parse($response, DOC_ENCODING);
+        $transformed = $parser->Reindex($structure, true);
+        $kod_error = htmlspecialchars(@$transformed["w3s.response"]["retval"], ENT_QUOTES);
+//echo "ÐžÑˆÐ¸Ð±ÐºÐ° - ".$kod_error;
 
-		if ($kod_error == "0") {$db_pay_desk->demand_edit('y',$did);}
-		else {
-			$db_pay_desk->demand_add_coment('Íå ïðîèçâåäåíà âûïëàòà. ERROR='.$kod_error,$did); $db_pay_desk->demand_edit('er',$did);}
- $oper_res = "Payment_successfully";
-	}
-	else {$db_pay_desk->demand_add_coment('Íå ïîëó÷åí îòâåò îò ñåðâèñà.',$did); $db_pay_desk->demand_edit('er',$did);}
-return $oper_res;
+        if ($kod_error == "0") {$db_pay_desk->demand_edit('y',$did);}
+        else {
+            $db_pay_desk->demand_add_coment('ÐÐµ Ð¿Ñ€Ð¾Ð¸Ð·Ð²ÐµÐ´ÐµÐ½Ð° Ð²Ñ‹Ð¿Ð»Ð°Ñ‚Ð°. ERROR='.$kod_error,$did); $db_pay_desk->demand_edit('er',$did);}
+        $oper_res = "Payment_successfully";
+    }
+    else {$db_pay_desk->demand_add_coment('ÐÐµ Ð¿Ð¾Ð»ÑƒÑ‡ÐµÐ½ Ð¾Ñ‚Ð²ÐµÑ‚ Ð¾Ñ‚ ÑÐµÑ€Ð²Ð¸ÑÐ°.',$did); $db_pay_desk->demand_edit('er',$did);}
+    return $oper_res;
 }
 
 function check_payment($ex_input,$purse_in,$in_val,$desc_pay,$did,$sel_idpay,$type_oper,$direct) {
 
-//ïóòü èçìåíèòü
+//Ð¿ÑƒÑ‚ÑŒ Ð¸Ð·Ð¼ÐµÐ½Ð¸Ñ‚ÑŒ
 //include("xml/conf.php");
 //include("xml/wmxiparser.php");
-include("../const.inc.aspx");
+    include("../const.inc.aspx");
 //$db_exchange = new CustomSQL_exchange($DBName_exchange);
 //$db_pay_desk = new CustomSQL_pay_desk($DBName_pay_desk);
-$db_exchange = new CustomSQL_exchange($DBName_exchange);
-if($type_oper == 'exchange') {
-	$db_pay_desk = new CustomSQL_exchange($DBName_exchange);
-	$name_func = "demand_edit";
-	$name_func_kom = "demand_add_coment";}
-if($type_oper == 'NAL') {
-	$db_pay_desk = new CustomSQL_pay_desk($DBName_pay_desk);
-	$name_func = "demand_edit_cash";
-	$name_func_kom = "cash_add_coment";}
+    $db_exchange = new CustomSQL_exchange($DBName_exchange);
+    if($type_oper == 'exchange') {
+        $db_pay_desk = new CustomSQL_exchange($DBName_exchange);
+        $name_func = "demand_edit";
+        $name_func_kom = "demand_add_coment";}
+    if($type_oper == 'NAL') {
+        $db_pay_desk = new CustomSQL_pay_desk($DBName_pay_desk);
+        $name_func = "demand_edit_cash";
+        $name_func_kom = "cash_add_coment";}
 //$parser = new WMXIParser();
 
-	if ($ex_input == "WMZ" || $ex_input == "WMR" || $ex_input == "WME" || $ex_input == "WMG" || $ex_input == "WMU" || $ex_input == "WMY" || $ex_input == "WMB") { $wmt_purse = $ex_input; $ex_input = "WMT";}
-switch ($ex_input) :
+    if ($ex_input == "WMZ" || $ex_input == "WMR" || $ex_input == "WME" || $ex_input == "WMG" || $ex_input == "WMU" || $ex_input == "WMY" || $ex_input == "WMB") { $wmt_purse = $ex_input; $ex_input = "WMT";}
+    switch ($ex_input) :
 
-	case ("WMT") :
-$exch_balance = $db_exchange->exch_balance($wmt_purse);
-$in_val_com = $in_val * 1.008;
-			$db_exchange->demand_update_bal($exch_balance[0]["balance"] - $in_val_com,$wmt_purse);
-if ($exch_balance[0]["balance"] >= $in_val_com) {
-/*
-	$response = $wmxi->X2(
-			intval($sel_idpay),    # íîìåð ïåðåâîäà â ñèñòåìå ó÷åòà îòïðàâèòåëÿ; ëþáîå öåëîå ÷èñëî áåç çíàêà, äîëæíî áûòü óíèêàëüíûì
-			$exch_balance[0]["purse"],          # íîìåð êîøåëüêà ñ êîòîðîãî âûïîëíÿåòñÿ ïåðåâîä (îòïðàâèòåëü)
-			$purse_in,         # íîìåð êîøåëüêà, íî êîòîðûé âûïîëíÿåòñÿ ïåðåâîä (ïîëó÷àòåëü)
-			floatval($in_val),  # ÷èñëî ñ ïëàâàþùåé òî÷êîé áåç íåçíà÷àùèõ ñèìâîëîâ
-			'0',    # öåëîå îò 0 äî 255 ñèìâîëîâ; 0 - áåç ïðîòåêöèè
-			'',       # ïðîèçâîëüíàÿ ñòðîêà îò 0 äî 255 ñèìâîëîâ; ïðîáåëû â íà÷àëå èëè êîíöå íå äîïóñêàþòñÿ
-			trim($desc_pay),        # ïðîèçâîëüíàÿ ñòðîêà îò 0 äî 255 ñèìâîëîâ; ïðîáåëû â íà÷àëå èëè êîíöå íå äîïóñêàþòñÿ
-			intval('0'),    # öåëîå ÷èñëî > 0; åñëè 0 - ïåðåâîä íå ïî ñ÷åòó
-			'1'    # åñëè 0 – ïåðåâîä áóäåò âûïîëíÿòüñÿ áåç ó÷åòà ðàçðåøàåò ëè ïîëó÷àòåëü ïåðåâîä; 1 – ïåðåâîä áóäåò âûïîëíÿòüñÿ òîëüêî åñëè ïîëó÷àòåëü ðàçðåøàåò ïåðåâîä (â ïðîòèâíîì ñëó÷àå êîä âîçâðàòà – 35)
-		);
-		$structure = $parser->Parse($response, DOC_ENCODING);
-		$transformed = $parser->Reindex($structure, true);
-		$kod_error = htmlspecialchars(@$transformed["w3s.response"]["retval"], ENT_QUOTES);
-*/
-			//$ext = new eWebmoney('slave_wmid');
-			$r = eWebmoney::x2(array('id_pay'=>$sel_idpay,'purse_in'=>$purse_in,'purse_type'=>$wmt_purse,'amount'=>floatval($in_val),'desc'=>$desc_pay,'direct'=>$direct));
+        case ("WMT") :
+            $exch_balance = $db_exchange->exch_balance($wmt_purse);
+            $in_val_com = $in_val * 1.008;
+            $db_exchange->demand_update_bal($exch_balance[0]["balance"] - $in_val_com,$wmt_purse);
+            if ($exch_balance[0]["balance"] >= $in_val_com) {
+                /*
+                    $response = $wmxi->X2(
+                            intval($sel_idpay),    # Ð½Ð¾Ð¼ÐµÑ€ Ð¿ÐµÑ€ÐµÐ²Ð¾Ð´Ð° Ð² ÑÐ¸ÑÑ‚ÐµÐ¼Ðµ ÑƒÑ‡ÐµÑ‚Ð° Ð¾Ñ‚Ð¿Ñ€Ð°Ð²Ð¸Ñ‚ÐµÐ»Ñ; Ð»ÑŽÐ±Ð¾Ðµ Ñ†ÐµÐ»Ð¾Ðµ Ñ‡Ð¸ÑÐ»Ð¾ Ð±ÐµÐ· Ð·Ð½Ð°ÐºÐ°, Ð´Ð¾Ð»Ð¶Ð½Ð¾ Ð±Ñ‹Ñ‚ÑŒ ÑƒÐ½Ð¸ÐºÐ°Ð»ÑŒÐ½Ñ‹Ð¼
+                            $exch_balance[0]["purse"],          # Ð½Ð¾Ð¼ÐµÑ€ ÐºÐ¾ÑˆÐµÐ»ÑŒÐºÐ° Ñ ÐºÐ¾Ñ‚Ð¾Ñ€Ð¾Ð³Ð¾ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÑÐµÑ‚ÑÑ Ð¿ÐµÑ€ÐµÐ²Ð¾Ð´ (Ð¾Ñ‚Ð¿Ñ€Ð°Ð²Ð¸Ñ‚ÐµÐ»ÑŒ)
+                            $purse_in,         # Ð½Ð¾Ð¼ÐµÑ€ ÐºÐ¾ÑˆÐµÐ»ÑŒÐºÐ°, Ð½Ð¾ ÐºÐ¾Ñ‚Ð¾Ñ€Ñ‹Ð¹ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÑÐµÑ‚ÑÑ Ð¿ÐµÑ€ÐµÐ²Ð¾Ð´ (Ð¿Ð¾Ð»ÑƒÑ‡Ð°Ñ‚ÐµÐ»ÑŒ)
+                            floatval($in_val),  # Ñ‡Ð¸ÑÐ»Ð¾ Ñ Ð¿Ð»Ð°Ð²Ð°ÑŽÑ‰ÐµÐ¹ Ñ‚Ð¾Ñ‡ÐºÐ¾Ð¹ Ð±ÐµÐ· Ð½ÐµÐ·Ð½Ð°Ñ‡Ð°Ñ‰Ð¸Ñ… ÑÐ¸Ð¼Ð²Ð¾Ð»Ð¾Ð²
+                            '0',    # Ñ†ÐµÐ»Ð¾Ðµ Ð¾Ñ‚ 0 Ð´Ð¾ 255 ÑÐ¸Ð¼Ð²Ð¾Ð»Ð¾Ð²; 0 - Ð±ÐµÐ· Ð¿Ñ€Ð¾Ñ‚ÐµÐºÑ†Ð¸Ð¸
+                            '',       # Ð¿Ñ€Ð¾Ð¸Ð·Ð²Ð¾Ð»ÑŒÐ½Ð°Ñ ÑÑ‚Ñ€Ð¾ÐºÐ° Ð¾Ñ‚ 0 Ð´Ð¾ 255 ÑÐ¸Ð¼Ð²Ð¾Ð»Ð¾Ð²; Ð¿Ñ€Ð¾Ð±ÐµÐ»Ñ‹ Ð² Ð½Ð°Ñ‡Ð°Ð»Ðµ Ð¸Ð»Ð¸ ÐºÐ¾Ð½Ñ†Ðµ Ð½Ðµ Ð´Ð¾Ð¿ÑƒÑÐºÐ°ÑŽÑ‚ÑÑ
+                            trim($desc_pay),        # Ð¿Ñ€Ð¾Ð¸Ð·Ð²Ð¾Ð»ÑŒÐ½Ð°Ñ ÑÑ‚Ñ€Ð¾ÐºÐ° Ð¾Ñ‚ 0 Ð´Ð¾ 255 ÑÐ¸Ð¼Ð²Ð¾Ð»Ð¾Ð²; Ð¿Ñ€Ð¾Ð±ÐµÐ»Ñ‹ Ð² Ð½Ð°Ñ‡Ð°Ð»Ðµ Ð¸Ð»Ð¸ ÐºÐ¾Ð½Ñ†Ðµ Ð½Ðµ Ð´Ð¾Ð¿ÑƒÑÐºÐ°ÑŽÑ‚ÑÑ
+                            intval('0'),    # Ñ†ÐµÐ»Ð¾Ðµ Ñ‡Ð¸ÑÐ»Ð¾ > 0; ÐµÑÐ»Ð¸ 0 - Ð¿ÐµÑ€ÐµÐ²Ð¾Ð´ Ð½Ðµ Ð¿Ð¾ ÑÑ‡ÐµÑ‚Ñƒ
+                            '1'    # ÐµÑÐ»Ð¸ 0 â€“ Ð¿ÐµÑ€ÐµÐ²Ð¾Ð´ Ð±ÑƒÐ´ÐµÑ‚ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÑÑ‚ÑŒÑÑ Ð±ÐµÐ· ÑƒÑ‡ÐµÑ‚Ð° Ñ€Ð°Ð·Ñ€ÐµÑˆÐ°ÐµÑ‚ Ð»Ð¸ Ð¿Ð¾Ð»ÑƒÑ‡Ð°Ñ‚ÐµÐ»ÑŒ Ð¿ÐµÑ€ÐµÐ²Ð¾Ð´; 1 â€“ Ð¿ÐµÑ€ÐµÐ²Ð¾Ð´ Ð±ÑƒÐ´ÐµÑ‚ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÑÑ‚ÑŒÑÑ Ñ‚Ð¾Ð»ÑŒÐºÐ¾ ÐµÑÐ»Ð¸ Ð¿Ð¾Ð»ÑƒÑ‡Ð°Ñ‚ÐµÐ»ÑŒ Ñ€Ð°Ð·Ñ€ÐµÑˆÐ°ÐµÑ‚ Ð¿ÐµÑ€ÐµÐ²Ð¾Ð´ (Ð² Ð¿Ñ€Ð¾Ñ‚Ð¸Ð²Ð½Ð¾Ð¼ ÑÐ»ÑƒÑ‡Ð°Ðµ ÐºÐ¾Ð´ Ð²Ð¾Ð·Ð²Ñ€Ð°Ñ‚Ð° â€“ 35)
+                        );
+                        $structure = $parser->Parse($response, DOC_ENCODING);
+                        $transformed = $parser->Reindex($structure, true);
+                        $kod_error = htmlspecialchars(@$transformed["w3s.response"]["retval"], ENT_QUOTES);
+                */
+                //$ext = new eWebmoney('slave_wmid');
+                $r = Extension::Payments()->Webmoney()->x2(array('id_pay'=>$sel_idpay,'purse_in'=>$purse_in,'purse_type'=>$wmt_purse,'amount'=>floatval($in_val),'desc'=>$desc_pay,'direct'=>$direct));
 
-		if ($r->retval == "0") {
-			$db_pay_desk->$name_func('y',$did);
-			echo "Payment_successfully";
-		} else {
-			$db_pay_desk->$name_func('er',$did);
-			$db_pay_desk->$name_func_kom('Ïî òåõíè÷åñêèìè ïðè÷èíàì, çàÿâêà èñïîëíåíà ÍÅ íåêîððåêòíî. Àäìèíèñòðàöèÿ îïîâåùåíà. ERROR='.$r->retval,$did); exit();
-		}
-}
-else {
-	//$db_pay_desk->$name_func('er',$did);
-	$db_pay_desk->$name_func_kom('Áàëàíñ îáìåíèâàåìîé âàëþòû óìåíüøèëñÿ â ïðîöåññå îáìåíà. Ñîîáùèòå àäìèíèñòðàöèè.',$did);
-	exit();
-}
-	break;
-	case ("RBK Money") :
-$exch_balance = $db_exchange->exch_balance($ex_input);
-$in_val_com = $in_val * 1.005;
-	$bal_in = $exch_balance[0]["balance"] - $in_val_com;
-	$db_exchange->demand_update_bal($bal_in,$ex_input);
-if ($exch_balance[0]["balance"] < $in_val_com) {
-	//$db_pay_desk->$name_func('er',$did);
-	$db_pay_desk->$name_func_kom('Áàëàíñ îáìåíèâàåìîé âàëþòû óìåíüøèëñÿ â ïðîöåññå îáìåíà. Ñîîáùèòå àäìèíèñòðàöèè.',$did);
-}
-	break;
-	case ("EasyPay") :
+                if ($r->retval == "0") {
+                    $db_pay_desk->$name_func('y',$did);
+                    echo "Payment_successfully";
+                } else {
+                    $db_pay_desk->$name_func('er',$did);
+                    $db_pay_desk->$name_func_kom('ÐŸÐ¾ Ñ‚ÐµÑ…Ð½Ð¸Ñ‡ÐµÑÐºÐ¸Ð¼Ð¸ Ð¿Ñ€Ð¸Ñ‡Ð¸Ð½Ð°Ð¼, Ð·Ð°ÑÐ²ÐºÐ° Ð¸ÑÐ¿Ð¾Ð»Ð½ÐµÐ½Ð° ÐÐ• Ð½ÐµÐºÐ¾Ñ€Ñ€ÐµÐºÑ‚Ð½Ð¾. ÐÐ´Ð¼Ð¸Ð½Ð¸ÑÑ‚Ñ€Ð°Ñ†Ð¸Ñ Ð¾Ð¿Ð¾Ð²ÐµÑ‰ÐµÐ½Ð°. ERROR='.$r->retval,$did); exit();
+                }
+            }
+            else {
+                //$db_pay_desk->$name_func('er',$did);
+                $db_pay_desk->$name_func_kom('Ð‘Ð°Ð»Ð°Ð½Ñ Ð¾Ð±Ð¼ÐµÐ½Ð¸Ð²Ð°ÐµÐ¼Ð¾Ð¹ Ð²Ð°Ð»ÑŽÑ‚Ñ‹ ÑƒÐ¼ÐµÐ½ÑŒÑˆÐ¸Ð»ÑÑ Ð² Ð¿Ñ€Ð¾Ñ†ÐµÑÑÐµ Ð¾Ð±Ð¼ÐµÐ½Ð°. Ð¡Ð¾Ð¾Ð±Ñ‰Ð¸Ñ‚Ðµ Ð°Ð´Ð¼Ð¸Ð½Ð¸ÑÑ‚Ñ€Ð°Ñ†Ð¸Ð¸.',$did);
+                exit();
+            }
+            break;
+        case ("RBK Money") :
+            $exch_balance = $db_exchange->exch_balance($ex_input);
+            $in_val_com = $in_val * 1.005;
+            $bal_in = $exch_balance[0]["balance"] - $in_val_com;
+            $db_exchange->demand_update_bal($bal_in,$ex_input);
+            if ($exch_balance[0]["balance"] < $in_val_com) {
+                //$db_pay_desk->$name_func('er',$did);
+                $db_pay_desk->$name_func_kom('Ð‘Ð°Ð»Ð°Ð½Ñ Ð¾Ð±Ð¼ÐµÐ½Ð¸Ð²Ð°ÐµÐ¼Ð¾Ð¹ Ð²Ð°Ð»ÑŽÑ‚Ñ‹ ÑƒÐ¼ÐµÐ½ÑŒÑˆÐ¸Ð»ÑÑ Ð² Ð¿Ñ€Ð¾Ñ†ÐµÑÑÐµ Ð¾Ð±Ð¼ÐµÐ½Ð°. Ð¡Ð¾Ð¾Ð±Ñ‰Ð¸Ñ‚Ðµ Ð°Ð´Ð¼Ð¸Ð½Ð¸ÑÑ‚Ñ€Ð°Ñ†Ð¸Ð¸.',$did);
+            }
+            break;
+        case ("EasyPay") :
 
-	
-	
+
+
 //if ($exch_balance[0]["balance"] >= $in_val_com) {
-	$purse = $db_exchange->EP_purse_output($in_val*1.02);
-	//$sql = "select acount from acount_easypay where status=1 and st_output=1 and balance>=$s_output and outputday+'$s_output'<{$limitday} and output+'$s_output'<{$limitmouth} order by id ASC LIMIT 1";
-	//vsLog::add($purse);
-	if(!empty($purse)) {
-		$db_exchange->edit_bal_minus($in_val*1.02,$ex_input);
-		$db_exchange->edit_bal_ep($purse[0]['acount'],$in_val*1.02);
-		$db_exchange->upd_time_dayout($purse[0]['acount']);
-		$db_exchange->edit_purse_input($did,$purse[0]['acount']);
-		require($atm_dir."nncron/func_easypay.aspx");
-			//âûâîä ¹ êîøåëüêà íà êîò. áóäåò âûïîëíÿòüñÿ ïåðåâîä èëè àâòîðèçàöèÿ äëÿ ïðîâåðêè ïëàòåæà
-			//$purse = $db_exchange->sel_purse_out('EasyPay');
-			$p = "EP".$purse[0]['acount'];
-			$pp = "PP".$purse[0]['acount'];
-		//$class_EasyPay = new EasyPay();
-		$str_result = EasyPay::direct_translation($purse[0]['acount'],$$p,$$pp,$purse_in,trim(sprintf("%8.0f ",$in_val)),$did);
-		if($str_result == "TRANSFER_OK") {$db_exchange->$name_func('y',$did);}
-		elseif($str_result == "TRANSFER_ERROR") {$db_pay_desk->$name_func_kom('Îïåðàöèÿ áûëà âûïîëíåíà íåêîððåêòíî. Àäìèíèñòðàöèÿ îïîâåùåíà îá îøèáêå.',$did);}
-		elseif($str_result == "ERROR_RECIPIENT") {$db_pay_desk->$name_func_kom('Äëÿ ïðîâåäåíèÿ ýòîé îïåðàöèè òðåáóåòñÿ áîëåå âûñîêèé ñòàòóñ êîøåëüêà (êîøåëåê ïîëó÷àòåëÿ). Àäìèíèñòðàöèÿ îïîâåùåíà îá îøèáêå.',$did);}
-		elseif($str_result == "ERROR_PURSE") {$db_pay_desk->$name_func_kom('Íåñóùåñòâóþùèé Èäåíòèôèêàòîð ýëåêòðîííîãî êîøåëüêà EasyPay (êîøåëåê ïîëó÷àòåëÿ). Àäìèíèñòðàöèÿ îïîâåùåíà îá îøèáêå.',$did);}
-		elseif($str_result == "ERROR_EXCESS_S") {$db_pay_desk->$name_func_kom('Ïðåâûøåíî ìåñÿ÷íîå îãðàíè÷åíèå ïî ñóììå îïåðàöèé (êîøåëåê îòïðàâèòåëÿ). Àäìèíèñòðàöèÿ îïîâåùåíà îá îøèáêå.',$did);}
-		elseif($str_result == "ERROR_EXCESS_U") {$db_pay_desk->$name_func_kom('Ïðåâûøåíî ìåñÿ÷íîå îãðàíè÷åíèå ïî ñóììå îïåðàöèé (êîøåëåê ïîëó÷àòåëÿ). Àäìèíèñòðàöèÿ îïîâåùåíà îá îøèáêå.',$did);}
-		elseif($str_result == "MAX_LIMIT_DAY") {$db_pay_desk->$name_func_kom('Ïðåâûøåíî äíåâíîå îãðàíè÷åíèå (êîøåëåê îòïðàâèòåëÿ). Àäìèíèñòðàöèÿ îïîâåùåíà îá îøèáêå.',$did);}
-		elseif($str_result == "ERROR_BALANCE") {$db_pay_desk->$name_func_kom('Íåäîñòàòî÷íûé ðåçåðâ äëÿ çàâåðøåíèÿ îïåðàöèè. Àäìèíèñòðàöèÿ îïîâåùåíà îá îøèáêå.',$did);}
-		elseif($str_result == "ERROR_CONNECT_SERVER") {$db_pay_desk->$name_func_kom('Îøèáêà ñîåäèíåíèÿ ñ ñåðâåðîì EasyPay. Àäìèíèñòðàöèÿ îïîâåùåíà îá îøèáêå.',$did);}
-			
-			}
-			
-			else {//$db_pay_desk->$name_func('er',$did);
-		$db_pay_desk->$name_func_kom('Áàëàíñ îáìåíèâàåìîé âàëþòû óìåíüøèëñÿ â ïðîöåññå îáìåíà. Àäìèíèñòðàöèÿ îïîâåùåíà îá îøèáêå.',$did);}
-		
-	break;
-	case ("YaDengi") :
-$exch_balance = $db_exchange->exch_balance($ex_input);
-$balance_in = $exch_balance[0]["balance"];
-	$bal_in = $balance_in - $in_val;
-	$db_exchange->demand_update_bal($bal_in,$ex_input);
-if ($balance_in < $in_val) {
-	//$db_pay_desk->$name_func('er',$did);
-	$db_pay_desk->$name_func_kom('Áàëàíñ îáìåíèâàåìîé âàëþòû óìåíüøèëñÿ â ïðîöåññå îáìåíà. Ñîîáùèòå àäìèíèñòðàöèè.',$did);
-}
-	break;
-	case ("Z-PAYMENT") :
-$exch_balance = $db_exchange->exch_balance($ex_input);
-$balance_in = $exch_balance[0]["balance"];
-	$bal_in = $balance_in - $in_val;
-	$db_exchange->demand_update_bal($bal_in,$ex_input);
-if ($balance_in < $in_val) {
-	//$db_pay_desk->$name_func('er',$did);
-	$db_pay_desk->$name_func_kom('Áàëàíñ îáìåíèâàåìîé âàëþòû óìåíüøèëñÿ â ïðîöåññå îáìåíà. Ñîîáùèòå àäìèíèñòðàöèè.',$did);
-}
-	break;
-	default:
-endswitch;
+            $purse = $db_exchange->EP_purse_output($in_val*1.02);
+            //$sql = "select acount from acount_easypay where status=1 and st_output=1 and balance>=$s_output and outputday+'$s_output'<{$limitday} and output+'$s_output'<{$limitmouth} order by id ASC LIMIT 1";
+            //vsLog::add($purse);
+            if(!empty($purse)) {
+                $db_exchange->edit_bal_minus($in_val*1.02,$ex_input);
+                $db_exchange->edit_bal_ep($purse[0]['acount'],$in_val*1.02);
+                $db_exchange->upd_time_dayout($purse[0]['acount']);
+                $db_exchange->edit_purse_input($did,$purse[0]['acount']);
+                require($atm_dir."nncron/func_easypay.aspx");
+                //Ð²Ñ‹Ð²Ð¾Ð´ â„– ÐºÐ¾ÑˆÐµÐ»ÑŒÐºÐ° Ð½Ð° ÐºÐ¾Ñ‚. Ð±ÑƒÐ´ÐµÑ‚ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÑÑ‚ÑŒÑÑ Ð¿ÐµÑ€ÐµÐ²Ð¾Ð´ Ð¸Ð»Ð¸ Ð°Ð²Ñ‚Ð¾Ñ€Ð¸Ð·Ð°Ñ†Ð¸Ñ Ð´Ð»Ñ Ð¿Ñ€Ð¾Ð²ÐµÑ€ÐºÐ¸ Ð¿Ð»Ð°Ñ‚ÐµÐ¶Ð°
+                //$purse = $db_exchange->sel_purse_out('EasyPay');
+                $p = "EP".$purse[0]['acount'];
+                $pp = "PP".$purse[0]['acount'];
+                //$class_EasyPay = new EasyPay();
+                $str_result = EasyPay::direct_translation($purse[0]['acount'],$$p,$$pp,$purse_in,trim(sprintf("%8.0f ",$in_val)),$did);
+                if($str_result == "TRANSFER_OK") {$db_exchange->$name_func('y',$did);}
+                elseif($str_result == "TRANSFER_ERROR") {$db_pay_desk->$name_func_kom('ÐžÐ¿ÐµÑ€Ð°Ñ†Ð¸Ñ Ð±Ñ‹Ð»Ð° Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð° Ð½ÐµÐºÐ¾Ñ€Ñ€ÐµÐºÑ‚Ð½Ð¾. ÐÐ´Ð¼Ð¸Ð½Ð¸ÑÑ‚Ñ€Ð°Ñ†Ð¸Ñ Ð¾Ð¿Ð¾Ð²ÐµÑ‰ÐµÐ½Ð° Ð¾Ð± Ð¾ÑˆÐ¸Ð±ÐºÐµ.',$did);}
+                elseif($str_result == "ERROR_RECIPIENT") {$db_pay_desk->$name_func_kom('Ð”Ð»Ñ Ð¿Ñ€Ð¾Ð²ÐµÐ´ÐµÐ½Ð¸Ñ ÑÑ‚Ð¾Ð¹ Ð¾Ð¿ÐµÑ€Ð°Ñ†Ð¸Ð¸ Ñ‚Ñ€ÐµÐ±ÑƒÐµÑ‚ÑÑ Ð±Ð¾Ð»ÐµÐµ Ð²Ñ‹ÑÐ¾ÐºÐ¸Ð¹ ÑÑ‚Ð°Ñ‚ÑƒÑ ÐºÐ¾ÑˆÐµÐ»ÑŒÐºÐ° (ÐºÐ¾ÑˆÐµÐ»ÐµÐº Ð¿Ð¾Ð»ÑƒÑ‡Ð°Ñ‚ÐµÐ»Ñ). ÐÐ´Ð¼Ð¸Ð½Ð¸ÑÑ‚Ñ€Ð°Ñ†Ð¸Ñ Ð¾Ð¿Ð¾Ð²ÐµÑ‰ÐµÐ½Ð° Ð¾Ð± Ð¾ÑˆÐ¸Ð±ÐºÐµ.',$did);}
+                elseif($str_result == "ERROR_PURSE") {$db_pay_desk->$name_func_kom('ÐÐµÑÑƒÑ‰ÐµÑÑ‚Ð²ÑƒÑŽÑ‰Ð¸Ð¹ Ð˜Ð´ÐµÐ½Ñ‚Ð¸Ñ„Ð¸ÐºÐ°Ñ‚Ð¾Ñ€ ÑÐ»ÐµÐºÑ‚Ñ€Ð¾Ð½Ð½Ð¾Ð³Ð¾ ÐºÐ¾ÑˆÐµÐ»ÑŒÐºÐ° EasyPay (ÐºÐ¾ÑˆÐµÐ»ÐµÐº Ð¿Ð¾Ð»ÑƒÑ‡Ð°Ñ‚ÐµÐ»Ñ). ÐÐ´Ð¼Ð¸Ð½Ð¸ÑÑ‚Ñ€Ð°Ñ†Ð¸Ñ Ð¾Ð¿Ð¾Ð²ÐµÑ‰ÐµÐ½Ð° Ð¾Ð± Ð¾ÑˆÐ¸Ð±ÐºÐµ.',$did);}
+                elseif($str_result == "ERROR_EXCESS_S") {$db_pay_desk->$name_func_kom('ÐŸÑ€ÐµÐ²Ñ‹ÑˆÐµÐ½Ð¾ Ð¼ÐµÑÑÑ‡Ð½Ð¾Ðµ Ð¾Ð³Ñ€Ð°Ð½Ð¸Ñ‡ÐµÐ½Ð¸Ðµ Ð¿Ð¾ ÑÑƒÐ¼Ð¼Ðµ Ð¾Ð¿ÐµÑ€Ð°Ñ†Ð¸Ð¹ (ÐºÐ¾ÑˆÐµÐ»ÐµÐº Ð¾Ñ‚Ð¿Ñ€Ð°Ð²Ð¸Ñ‚ÐµÐ»Ñ). ÐÐ´Ð¼Ð¸Ð½Ð¸ÑÑ‚Ñ€Ð°Ñ†Ð¸Ñ Ð¾Ð¿Ð¾Ð²ÐµÑ‰ÐµÐ½Ð° Ð¾Ð± Ð¾ÑˆÐ¸Ð±ÐºÐµ.',$did);}
+                elseif($str_result == "ERROR_EXCESS_U") {$db_pay_desk->$name_func_kom('ÐŸÑ€ÐµÐ²Ñ‹ÑˆÐµÐ½Ð¾ Ð¼ÐµÑÑÑ‡Ð½Ð¾Ðµ Ð¾Ð³Ñ€Ð°Ð½Ð¸Ñ‡ÐµÐ½Ð¸Ðµ Ð¿Ð¾ ÑÑƒÐ¼Ð¼Ðµ Ð¾Ð¿ÐµÑ€Ð°Ñ†Ð¸Ð¹ (ÐºÐ¾ÑˆÐµÐ»ÐµÐº Ð¿Ð¾Ð»ÑƒÑ‡Ð°Ñ‚ÐµÐ»Ñ). ÐÐ´Ð¼Ð¸Ð½Ð¸ÑÑ‚Ñ€Ð°Ñ†Ð¸Ñ Ð¾Ð¿Ð¾Ð²ÐµÑ‰ÐµÐ½Ð° Ð¾Ð± Ð¾ÑˆÐ¸Ð±ÐºÐµ.',$did);}
+                elseif($str_result == "MAX_LIMIT_DAY") {$db_pay_desk->$name_func_kom('ÐŸÑ€ÐµÐ²Ñ‹ÑˆÐµÐ½Ð¾ Ð´Ð½ÐµÐ²Ð½Ð¾Ðµ Ð¾Ð³Ñ€Ð°Ð½Ð¸Ñ‡ÐµÐ½Ð¸Ðµ (ÐºÐ¾ÑˆÐµÐ»ÐµÐº Ð¾Ñ‚Ð¿Ñ€Ð°Ð²Ð¸Ñ‚ÐµÐ»Ñ). ÐÐ´Ð¼Ð¸Ð½Ð¸ÑÑ‚Ñ€Ð°Ñ†Ð¸Ñ Ð¾Ð¿Ð¾Ð²ÐµÑ‰ÐµÐ½Ð° Ð¾Ð± Ð¾ÑˆÐ¸Ð±ÐºÐµ.',$did);}
+                elseif($str_result == "ERROR_BALANCE") {$db_pay_desk->$name_func_kom('ÐÐµÐ´Ð¾ÑÑ‚Ð°Ñ‚Ð¾Ñ‡Ð½Ñ‹Ð¹ Ñ€ÐµÐ·ÐµÑ€Ð² Ð´Ð»Ñ Ð·Ð°Ð²ÐµÑ€ÑˆÐµÐ½Ð¸Ñ Ð¾Ð¿ÐµÑ€Ð°Ñ†Ð¸Ð¸. ÐÐ´Ð¼Ð¸Ð½Ð¸ÑÑ‚Ñ€Ð°Ñ†Ð¸Ñ Ð¾Ð¿Ð¾Ð²ÐµÑ‰ÐµÐ½Ð° Ð¾Ð± Ð¾ÑˆÐ¸Ð±ÐºÐµ.',$did);}
+                elseif($str_result == "ERROR_CONNECT_SERVER") {$db_pay_desk->$name_func_kom('ÐžÑˆÐ¸Ð±ÐºÐ° ÑÐ¾ÐµÐ´Ð¸Ð½ÐµÐ½Ð¸Ñ Ñ ÑÐµÑ€Ð²ÐµÑ€Ð¾Ð¼ EasyPay. ÐÐ´Ð¼Ð¸Ð½Ð¸ÑÑ‚Ñ€Ð°Ñ†Ð¸Ñ Ð¾Ð¿Ð¾Ð²ÐµÑ‰ÐµÐ½Ð° Ð¾Ð± Ð¾ÑˆÐ¸Ð±ÐºÐµ.',$did);}
+
+            }
+
+            else {//$db_pay_desk->$name_func('er',$did);
+                $db_pay_desk->$name_func_kom('Ð‘Ð°Ð»Ð°Ð½Ñ Ð¾Ð±Ð¼ÐµÐ½Ð¸Ð²Ð°ÐµÐ¼Ð¾Ð¹ Ð²Ð°Ð»ÑŽÑ‚Ñ‹ ÑƒÐ¼ÐµÐ½ÑŒÑˆÐ¸Ð»ÑÑ Ð² Ð¿Ñ€Ð¾Ñ†ÐµÑÑÐµ Ð¾Ð±Ð¼ÐµÐ½Ð°. ÐÐ´Ð¼Ð¸Ð½Ð¸ÑÑ‚Ñ€Ð°Ñ†Ð¸Ñ Ð¾Ð¿Ð¾Ð²ÐµÑ‰ÐµÐ½Ð° Ð¾Ð± Ð¾ÑˆÐ¸Ð±ÐºÐµ.',$did);}
+
+            break;
+        case ("YaDengi") :
+            $exch_balance = $db_exchange->exch_balance($ex_input);
+            $balance_in = $exch_balance[0]["balance"];
+            $bal_in = $balance_in - $in_val;
+            $db_exchange->demand_update_bal($bal_in,$ex_input);
+            if ($balance_in < $in_val) {
+                //$db_pay_desk->$name_func('er',$did);
+                $db_pay_desk->$name_func_kom('Ð‘Ð°Ð»Ð°Ð½Ñ Ð¾Ð±Ð¼ÐµÐ½Ð¸Ð²Ð°ÐµÐ¼Ð¾Ð¹ Ð²Ð°Ð»ÑŽÑ‚Ñ‹ ÑƒÐ¼ÐµÐ½ÑŒÑˆÐ¸Ð»ÑÑ Ð² Ð¿Ñ€Ð¾Ñ†ÐµÑÑÐµ Ð¾Ð±Ð¼ÐµÐ½Ð°. Ð¡Ð¾Ð¾Ð±Ñ‰Ð¸Ñ‚Ðµ Ð°Ð´Ð¼Ð¸Ð½Ð¸ÑÑ‚Ñ€Ð°Ñ†Ð¸Ð¸.',$did);
+            }
+            break;
+        case ("Z-PAYMENT") :
+            $exch_balance = $db_exchange->exch_balance($ex_input);
+            $balance_in = $exch_balance[0]["balance"];
+            $bal_in = $balance_in - $in_val;
+            $db_exchange->demand_update_bal($bal_in,$ex_input);
+            if ($balance_in < $in_val) {
+                //$db_pay_desk->$name_func('er',$did);
+                $db_pay_desk->$name_func_kom('Ð‘Ð°Ð»Ð°Ð½Ñ Ð¾Ð±Ð¼ÐµÐ½Ð¸Ð²Ð°ÐµÐ¼Ð¾Ð¹ Ð²Ð°Ð»ÑŽÑ‚Ñ‹ ÑƒÐ¼ÐµÐ½ÑŒÑˆÐ¸Ð»ÑÑ Ð² Ð¿Ñ€Ð¾Ñ†ÐµÑÑÐµ Ð¾Ð±Ð¼ÐµÐ½Ð°. Ð¡Ð¾Ð¾Ð±Ñ‰Ð¸Ñ‚Ðµ Ð°Ð´Ð¼Ð¸Ð½Ð¸ÑÑ‚Ñ€Ð°Ñ†Ð¸Ð¸.',$did);
+            }
+            break;
+        default:
+    endswitch;
 }
 
-//ôóíêöèÿ îáíîâëåíèÿ áàëàíñà ïîñëå îïëàòû ïî óñëóãàì
+//Ñ„ÑƒÐ½ÐºÑ†Ð¸Ñ Ð¾Ð±Ð½Ð¾Ð²Ð»ÐµÐ½Ð¸Ñ Ð±Ð°Ð»Ð°Ð½ÑÐ° Ð¿Ð¾ÑÐ»Ðµ Ð¾Ð¿Ð»Ð°Ñ‚Ñ‹ Ð¿Ð¾ ÑƒÑÐ»ÑƒÐ³Ð°Ð¼
 function check_pay_uslugi($did,$output,$name_uslugi,$in_val,$out_val,$pole1,$pole2) {
-include("../const.inc.aspx");
+    include("../const.inc.aspx");
 
-	//$db = new CustomSQL($DBName);
-	$db_exchange = new CustomSQL_exchange($DBName_exchange);
-	$db_pay_desk = new CustomSQL_pay_desk($DBName_pay_desk);
-//ïîïîëíåíèå áàëàíñà
-	$db_pay_desk->demand_edit('yn',$did);
-	//$exch_balance = $db_exchange->exch_balance_service($output);
-	//$bal_in = $exch_balance[0]['balance'] + $out_val;
-	//$db_exchange->demand_update_bal_service($bal_in,$output);
+    //$db = new CustomSQL($DBName);
+    $db_exchange = new CustomSQL_exchange($DBName_exchange);
+    $db_pay_desk = new CustomSQL_pay_desk($DBName_pay_desk);
+//Ð¿Ð¾Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ðµ Ð±Ð°Ð»Ð°Ð½ÑÐ°
+    $db_pay_desk->demand_edit('yn',$did);
+    //$exch_balance = $db_exchange->exch_balance_service($output);
+    //$bal_in = $exch_balance[0]['balance'] + $out_val;
+    //$db_exchange->demand_update_bal_service($bal_in,$output);
 
-$mass_oper = array(VELCOM => "velcom", MTS => "mts", LIFE => "best", Dialog => "belcel",
-BF => "10131", BF17 => "10161", BF15 => "10155", BF16 => "10142", BF21 => "10213", BF22 => "10206", BF23 => "10234",
-TEL => "10111", TEL17 => "10141", TEL15 => "10145", TEL16 => "10092", TEL21 => "10193", TEL22 => "10016", TEL022 => "10216", TEL23 => "10214", KTV => "cosmostv", AchinaPlus => "13431", ATLANT => "atlant", SOLO => "solo", ZKH => "10011", ZKH16 => "10032", ZKH21 => "10063", ZKH22 => "10026");
-if($name_uslugi == 'BF' && preg_match("/1760[0-9]*/i",$pole1) || preg_match("/1705[0-9]*/i",$pole1) || preg_match("/1706[0-9]*/i",$pole1) || preg_match("/1704[0-9]*/i",$pole1) || preg_match("/1703[0-9]*/i",$pole1) || preg_match("/1701[0-9]*/i",$pole1) || preg_match("/1700[0-9]*/i",$pole1)) {$mass_oper[$name_uslugi] = '14521';}
-if(!empty($mass_oper[$name_uslugi])) {
-	//âûáîð ñ÷åòà ñ êîòîðîãî áóäåò ïðîèçâîäèòüñÿ ïåðåâîä
-	$purse = $db_exchange->EP_purse_out_service($in_val);
-	$db_pay_desk->edit_purse_input($did,$purse[0]['acount'],'demand_uslugi');
-	$p = "EP".$purse[0]['acount'];
-	$pp = "PP".$purse[0]['acount'];
-	if (!empty($purse[0]['acount'])) {
-	require($atm_dir."nncron/func_easypay.aspx");
-	$class_EasyPay = new EasyPay();
+    $mass_oper = array(VELCOM => "velcom", MTS => "mts", LIFE => "best", Dialog => "belcel",
+        BF => "10131", BF17 => "10161", BF15 => "10155", BF16 => "10142", BF21 => "10213", BF22 => "10206", BF23 => "10234",
+        TEL => "10111", TEL17 => "10141", TEL15 => "10145", TEL16 => "10092", TEL21 => "10193", TEL22 => "10016", TEL022 => "10216", TEL23 => "10214", KTV => "cosmostv", AchinaPlus => "13431", ATLANT => "atlant", SOLO => "solo", ZKH => "10011", ZKH16 => "10032", ZKH21 => "10063", ZKH22 => "10026");
+    if($name_uslugi == 'BF' && preg_match("/1760[0-9]*/i",$pole1) || preg_match("/1705[0-9]*/i",$pole1) || preg_match("/1706[0-9]*/i",$pole1) || preg_match("/1704[0-9]*/i",$pole1) || preg_match("/1703[0-9]*/i",$pole1) || preg_match("/1701[0-9]*/i",$pole1) || preg_match("/1700[0-9]*/i",$pole1)) {$mass_oper[$name_uslugi] = '14521';}
+    if(!empty($mass_oper[$name_uslugi])) {
+        //Ð²Ñ‹Ð±Ð¾Ñ€ ÑÑ‡ÐµÑ‚Ð° Ñ ÐºÐ¾Ñ‚Ð¾Ñ€Ð¾Ð³Ð¾ Ð±ÑƒÐ´ÐµÑ‚ Ð¿Ñ€Ð¾Ð¸Ð·Ð²Ð¾Ð´Ð¸Ñ‚ÑŒÑÑ Ð¿ÐµÑ€ÐµÐ²Ð¾Ð´
+        $purse = $db_exchange->EP_purse_out_service($in_val);
+        $db_pay_desk->edit_purse_input($did,$purse[0]['acount'],'demand_uslugi');
+        $p = "EP".$purse[0]['acount'];
+        $pp = "PP".$purse[0]['acount'];
+        if (!empty($purse[0]['acount'])) {
+            require($atm_dir."nncron/func_easypay.aspx");
+            $class_EasyPay = new EasyPay();
 //	$ak = $pole2.$pole1;
-	$str_result = $class_EasyPay->pay_usluga($purse[0]['acount'],$$p,$$pp,$pole2.$pole1,trim(sprintf("%8.0f ",$in_val)),$mass_oper[$name_uslugi]);
-		if($str_result == "TRANSFER_OK") {$db_pay_desk->demand_edit('y',$did);
-			$db_exchange->edit_bal_ep_service($purse[0]['acount'],$in_val);
-			echo "Payment_successfully";
-			}
-		if($str_result == "TRANSFER_ERROR") {$db_pay_desk->demand_edit('er',$did); $db_pay_desk->demand_add_coment('Îïåðàöèÿ íå âûïîëíåíà. Àäìèíèñòðàöèÿ îïîâåùåíà îá îøèáêå.',$did);}
-		if($str_result == "ERROR_BALANCE") {$db_pay_desk->demand_edit('er',$did); $db_pay_desk->demand_add_coment('Íåäîñòàòî÷íûé ðåçåðâ äëÿ çàâåðøåíèÿ îïåðàöèè. Àäìèíèñòðàöèÿ îïîâåùåíà îá îøèáêå.',$did);}
-		if($str_result == "ERROR_CONNECT_SERVER") {$db_pay_desk->demand_edit('er',$did); $db_pay_desk->demand_add_coment('Îøèáêà ñîåäèíåíèÿ ñ ïëàòåæíûì ñåðâåðîì. Àäìèíèñòðàöèÿ îïîâåùåíà îá îøèáêå.',$did);}
+            $str_result = $class_EasyPay->pay_usluga($purse[0]['acount'],$$p,$$pp,$pole2.$pole1,trim(sprintf("%8.0f ",$in_val)),$mass_oper[$name_uslugi]);
+            if($str_result == "TRANSFER_OK") {$db_pay_desk->demand_edit('y',$did);
+                $db_exchange->edit_bal_ep_service($purse[0]['acount'],$in_val);
+                echo "Payment_successfully";
+            }
+            if($str_result == "TRANSFER_ERROR") {$db_pay_desk->demand_edit('er',$did); $db_pay_desk->demand_add_coment('ÐžÐ¿ÐµÑ€Ð°Ñ†Ð¸Ñ Ð½Ðµ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð°. ÐÐ´Ð¼Ð¸Ð½Ð¸ÑÑ‚Ñ€Ð°Ñ†Ð¸Ñ Ð¾Ð¿Ð¾Ð²ÐµÑ‰ÐµÐ½Ð° Ð¾Ð± Ð¾ÑˆÐ¸Ð±ÐºÐµ.',$did);}
+            if($str_result == "ERROR_BALANCE") {$db_pay_desk->demand_edit('er',$did); $db_pay_desk->demand_add_coment('ÐÐµÐ´Ð¾ÑÑ‚Ð°Ñ‚Ð¾Ñ‡Ð½Ñ‹Ð¹ Ñ€ÐµÐ·ÐµÑ€Ð² Ð´Ð»Ñ Ð·Ð°Ð²ÐµÑ€ÑˆÐµÐ½Ð¸Ñ Ð¾Ð¿ÐµÑ€Ð°Ñ†Ð¸Ð¸. ÐÐ´Ð¼Ð¸Ð½Ð¸ÑÑ‚Ñ€Ð°Ñ†Ð¸Ñ Ð¾Ð¿Ð¾Ð²ÐµÑ‰ÐµÐ½Ð° Ð¾Ð± Ð¾ÑˆÐ¸Ð±ÐºÐµ.',$did);}
+            if($str_result == "ERROR_CONNECT_SERVER") {$db_pay_desk->demand_edit('er',$did); $db_pay_desk->demand_add_coment('ÐžÑˆÐ¸Ð±ÐºÐ° ÑÐ¾ÐµÐ´Ð¸Ð½ÐµÐ½Ð¸Ñ Ñ Ð¿Ð»Ð°Ñ‚ÐµÐ¶Ð½Ñ‹Ð¼ ÑÐµÑ€Ð²ÐµÑ€Ð¾Ð¼. ÐÐ´Ð¼Ð¸Ð½Ð¸ÑÑ‚Ñ€Ð°Ñ†Ð¸Ñ Ð¾Ð¿Ð¾Ð²ÐµÑ‰ÐµÐ½Ð° Ð¾Ð± Ð¾ÑˆÐ¸Ð±ÐºÐµ.',$did);}
 
-}
-else {$db_pay_desk->demand_add_coment('Íå íàéäåí ñ÷åò äëÿ îïëàòû. Âàøà çàÿâêà áóäåò âûïîëíåíà â áëèæàéøåå âðåìÿ ÷åðåç îïåðàòîðà .',$did); $db_pay_desk->demand_edit('er',$did);}
-}
+        }
+        else {$db_pay_desk->demand_add_coment('ÐÐµ Ð½Ð°Ð¹Ð´ÐµÐ½ ÑÑ‡ÐµÑ‚ Ð´Ð»Ñ Ð¾Ð¿Ð»Ð°Ñ‚Ñ‹. Ð’Ð°ÑˆÐ° Ð·Ð°ÑÐ²ÐºÐ° Ð±ÑƒÐ´ÐµÑ‚ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð° Ð² Ð±Ð»Ð¸Ð¶Ð°Ð¹ÑˆÐµÐµ Ð²Ñ€ÐµÐ¼Ñ Ñ‡ÐµÑ€ÐµÐ· Ð¾Ð¿ÐµÑ€Ð°Ñ‚Ð¾Ñ€Ð° .',$did); $db_pay_desk->demand_edit('er',$did);}
+    }
 }
 
-//ôóíêöèÿ îáíîâëåíèÿ áàëàíñà ïîñëå îïëàòû ïîïîëíåíèÿ êàðò
+//Ñ„ÑƒÐ½ÐºÑ†Ð¸Ñ Ð¾Ð±Ð½Ð¾Ð²Ð»ÐµÐ½Ð¸Ñ Ð±Ð°Ð»Ð°Ð½ÑÐ° Ð¿Ð¾ÑÐ»Ðµ Ð¾Ð¿Ð»Ð°Ñ‚Ñ‹ Ð¿Ð¾Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ñ ÐºÐ°Ñ€Ñ‚
 function output_NAL($did,$output,$out_val,$name_card,$card,$id_pay,$period) {
-	include("../const.inc.aspx");
-	$db_exchange = new CustomSQL_exchange($DBName_exchange);
-	$db_pay_desk = new CustomSQL_pay_desk($DBName_pay_desk);
-switch ($name_card) :
+    include("../const.inc.aspx");
+    $db_exchange = new CustomSQL_exchange($DBName_exchange);
+    $db_pay_desk = new CustomSQL_pay_desk($DBName_pay_desk);
+    switch ($name_card) :
 
-	case ("CARDUSD") :
-		require($atm_dir."nncron/liqpay.aspx");
- 		$class_LiqPAY = new LiqPAY();
-		$answer = $class_LiqPAY->API_LiqPAY($did,$id_pay,$card,$out_val,'USD','card');
-		if($answer == 'success') {$db_pay_desk->dem_edit_output('y',$did);}
-		else {$db_pay_desk->dem_coment_output($answer,$did); $db_pay_desk->dem_edit_output('er',$did);}
+        case ("CARDUSD") :
+            require($atm_dir."nncron/liqpay.aspx");
+            $class_LiqPAY = new LiqPAY();
+            $answer = $class_LiqPAY->API_LiqPAY($did,$id_pay,$card,$out_val,'USD','card');
+            if($answer == 'success') {$db_pay_desk->dem_edit_output('y',$did);}
+            else {$db_pay_desk->dem_coment_output($answer,$did); $db_pay_desk->dem_edit_output('er',$did);}
 
-		$fd = fopen("123.log","w");
-		fputs($fd, $answer."\n");
-                fflush($fd);
-		fclose($fd);
-	break;
-	case ("P24USD") :
+            $fd = fopen("123.log","w");
+            fputs($fd, $answer."\n");
+            fflush($fd);
+            fclose($fd);
+            break;
+        case ("P24USD") :
 
-	break;
-	case ("P24UAH") :
+            break;
+        case ("P24UAH") :
 
-	break;
-	case ("belbank") :
-	require($home_dir."mailer/smtp-func.aspx");
+            break;
+        case ("belbank") :
+            require($home_dir."mailer/smtp-func.aspx");
 
-	smtpmail("1176044@sms.velcom.by","atomly","{$card}/{$period}|{$out_val}","atomly");
+            smtpmail("1176044@sms.velcom.by","atomly","{$card}/{$period}|{$out_val}","atomly");
 
-	break;
-	case ("bpsb") :
+            break;
+        case ("bpsb") :
 
-	break;
-	default:
-endswitch;
+            break;
+        default:
+    endswitch;
 
 }
 
 
-//ôóíêöèÿ äëÿ ðàáîòû ñ ìàãàçèíàìè
+//Ñ„ÑƒÐ½ÐºÑ†Ð¸Ñ Ð´Ð»Ñ Ñ€Ð°Ð±Ð¾Ñ‚Ñ‹ Ñ Ð¼Ð°Ð³Ð°Ð·Ð¸Ð½Ð°Ð¼Ð¸
 function shop($did,$output,$out_val,$in_val,$name_card) {
 
-	//$db = new CustomSQL($DBName);
-	$db_exchange = new CustomSQL_exchange($DBName_exchange);
-	$db_pay_desk = new CustomSQL_pay_desk($DBName_pay_desk);
-//ïîïîëíåíèå áàëàíñà
-	$db_pay_desk->dem_edit_output('yn',$did);
-	$exch_balance = $db_exchange->exch_balance($output);
-	$bal_in = $exch_balance[0]['balance'] + $in_val;
-	$db_exchange->demand_update_bal($bal_in,$output);
-//èçìåíåíèå áàëàíñà âàëþòû êîòîðîé ïðîèñõîäèò îïëàòà
-	$exch_bal_card = $db_pay_desk->sel_card_bal($name_card);
+    //$db = new CustomSQL($DBName);
+    $db_exchange = new CustomSQL_exchange($DBName_exchange);
+    $db_pay_desk = new CustomSQL_pay_desk($DBName_pay_desk);
+//Ð¿Ð¾Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ðµ Ð±Ð°Ð»Ð°Ð½ÑÐ°
+    $db_pay_desk->dem_edit_output('yn',$did);
+    $exch_balance = $db_exchange->exch_balance($output);
+    $bal_in = $exch_balance[0]['balance'] + $in_val;
+    $db_exchange->demand_update_bal($bal_in,$output);
+//Ð¸Ð·Ð¼ÐµÐ½ÐµÐ½Ð¸Ðµ Ð±Ð°Ð»Ð°Ð½ÑÐ° Ð²Ð°Ð»ÑŽÑ‚Ñ‹ ÐºÐ¾Ñ‚Ð¾Ñ€Ð¾Ð¹ Ð¿Ñ€Ð¾Ð¸ÑÑ…Ð¾Ð´Ð¸Ñ‚ Ð¾Ð¿Ð»Ð°Ñ‚Ð°
+    $exch_bal_card = $db_pay_desk->sel_card_bal($name_card);
 
-if ($exch_bal_card[0]['balance'] >= $in_val) {
-	$balance_in = $exch_bal_card[0]['balance'] - $out_val * (1 + $exch_bal_card[0]['com_card']);
-	$db_pay_desk->update_bal_card($balance_in,$name_card);
-}
-else {
-	$db_pay_desk->dem_coment_output('Áàëàíñ îáìåíèâàåìîé âàëþòû óìåíüøèëñÿ â ïðîöåññå îáìåíà. Àäìèíèñòðàöèÿ îïîâåùåíà.',$did);
-	$error = true;
-}
-return  $error;
+    if ($exch_bal_card[0]['balance'] >= $in_val) {
+        $balance_in = $exch_bal_card[0]['balance'] - $out_val * (1 + $exch_bal_card[0]['com_card']);
+        $db_pay_desk->update_bal_card($balance_in,$name_card);
+    }
+    else {
+        $db_pay_desk->dem_coment_output('Ð‘Ð°Ð»Ð°Ð½Ñ Ð¾Ð±Ð¼ÐµÐ½Ð¸Ð²Ð°ÐµÐ¼Ð¾Ð¹ Ð²Ð°Ð»ÑŽÑ‚Ñ‹ ÑƒÐ¼ÐµÐ½ÑŒÑˆÐ¸Ð»ÑÑ Ð² Ð¿Ñ€Ð¾Ñ†ÐµÑÑÐµ Ð¾Ð±Ð¼ÐµÐ½Ð°. ÐÐ´Ð¼Ð¸Ð½Ð¸ÑÑ‚Ñ€Ð°Ñ†Ð¸Ñ Ð¾Ð¿Ð¾Ð²ÐµÑ‰ÐµÐ½Ð°.',$did);
+        $error = true;
+    }
+    return  $error;
 }
 
-///////////////////////////////////////////////////////////////////////////ôóíêöèÿ ïî ïîâòîðíîìó ïåðåâîäó ïî íåçàâåðøåííîé çàÿâêå
+///////////////////////////////////////////////////////////////////////////Ñ„ÑƒÐ½ÐºÑ†Ð¸Ñ Ð¿Ð¾ Ð¿Ð¾Ð²Ñ‚Ð¾Ñ€Ð½Ð¾Ð¼Ñƒ Ð¿ÐµÑ€ÐµÐ²Ð¾Ð´Ñƒ Ð¿Ð¾ Ð½ÐµÐ·Ð°Ð²ÐµÑ€ÑˆÐµÐ½Ð½Ð¾Ð¹ Ð·Ð°ÑÐ²ÐºÐµ
 /*function repet_pay($did,$ex_output,$ex_input,$purse_in,$out_val,$in_val,$id_pay,$purse_payment) {
 include("../const.inc.aspx");
 $db_exchange = new CustomSQL_exchange($DBName_exchange);
@@ -331,7 +331,7 @@ switch ($ex_input) :
 
 	if(!empty($purse_payment)) {
 		require_once($atm_dir."nncron/func_easypay.aspx");
-		//âûâîä ¹ êîøåëüêà íà êîò. áóäåò âûïîëíÿòüñÿ ïåðåâîä èëè àâòîðèçàöèÿ äëÿ ïðîâåðêè ïëàòåæà
+		//Ð²Ñ‹Ð²Ð¾Ð´ â„– ÐºÐ¾ÑˆÐµÐ»ÑŒÐºÐ° Ð½Ð° ÐºÐ¾Ñ‚. Ð±ÑƒÐ´ÐµÑ‚ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÑÑ‚ÑŒÑÑ Ð¿ÐµÑ€ÐµÐ²Ð¾Ð´ Ð¸Ð»Ð¸ Ð°Ð²Ñ‚Ð¾Ñ€Ð¸Ð·Ð°Ñ†Ð¸Ñ Ð´Ð»Ñ Ð¿Ñ€Ð¾Ð²ÐµÑ€ÐºÐ¸ Ð¿Ð»Ð°Ñ‚ÐµÐ¶Ð°
 		$p = "EP".$purse_payment;
 		$pp = "PP".$purse_payment;
 		$class_EasyPay = new EasyPay();
@@ -345,7 +345,7 @@ switch ($ex_input) :
 			//$db_exchange->upd_time_dayout($purse_payment);$db_exchange->demand_add_coment('',$did); $db_exchange->demand_edit('y',$did);
 		}
 	} else{
-		$db_exchange->demand_add_coment('Íå íàéäåí ñ÷åò äëÿ îïëàòû. Àäìèíèñòðàöèÿ îïîâåùåíà',$did);
+		$db_exchange->demand_add_coment('ÐÐµ Ð½Ð°Ð¹Ð´ÐµÐ½ ÑÑ‡ÐµÑ‚ Ð´Ð»Ñ Ð¾Ð¿Ð»Ð°Ñ‚Ñ‹. ÐÐ´Ð¼Ð¸Ð½Ð¸ÑÑ‚Ñ€Ð°Ñ†Ð¸Ñ Ð¾Ð¿Ð¾Ð²ÐµÑ‰ÐµÐ½Ð°',$did);
 	}
 	break;
 	default:
@@ -354,102 +354,102 @@ endswitch;
 
 
 
-///////////////////////////////////////////////////////////////////////////ôóíêöèÿ âîçâðàòà ïëàòåæà
+///////////////////////////////////////////////////////////////////////////Ñ„ÑƒÐ½ÐºÑ†Ð¸Ñ Ð²Ð¾Ð·Ð²Ñ€Ð°Ñ‚Ð° Ð¿Ð»Ð°Ñ‚ÐµÐ¶Ð°
 function return_pay($did,$ex_output,$ex_input,$purse_payment,$purse_out,$out_val,$in_val,$id_pay) {
-//ïóòü èçìåíèòü
-include("../const.inc.aspx");
+//Ð¿ÑƒÑ‚ÑŒ Ð¸Ð·Ð¼ÐµÐ½Ð¸Ñ‚ÑŒ
+    include("../const.inc.aspx");
 //$db = new CustomSQL($DBName);
-$db_exchange = new CustomSQL_exchange($DBName_exchange);
+    $db_exchange = new CustomSQL_exchange($DBName_exchange);
 //$db_pay_desk = new CustomSQL_pay_desk($DBName_pay_desk);
 
-	if ($ex_output == "WMZ" || $ex_output == "WMR" || $ex_output == "WME" || $ex_output == "WMG" || $ex_output == "WMU" || $ex_output == "WMY" || $ex_output == "WMB") { $wmt_purse = $ex_output; $ex_output = "WMT";}
-switch ($ex_output) :
+    if ($ex_output == "WMZ" || $ex_output == "WMR" || $ex_output == "WME" || $ex_output == "WMG" || $ex_output == "WMU" || $ex_output == "WMY" || $ex_output == "WMB") { $wmt_purse = $ex_output; $ex_output = "WMT";}
+    switch ($ex_output) :
 
-	case ("WMT") :
-require_once($atm_dir."nncron/func_wm.aspx");
-	$class_WebMoney = new WebMoney();
-	$desc_pay = "Return of the exchange: {ex_output} ({$out_val})->{$ex_input} ({$in_val}), ID:{$did}";
+        case ("WMT") :
+            require_once($atm_dir."nncron/func_wm.aspx");
+            $class_WebMoney = new WebMoney();
+            $desc_pay = "Return of the exchange: {ex_output} ({$out_val})->{$ex_input} ({$in_val}), ID:{$did}";
 
-	$exch_balance = $db_exchange->exch_balance($wmt_purse);
-	if($exch_balance[0]["balance"] >= $out_val){
+            $exch_balance = $db_exchange->exch_balance($wmt_purse);
+            if($exch_balance[0]["balance"] >= $out_val){
 
-		$trans_result = $class_WebMoney->return_translation_X14($id_pay,$out_val);
-		if($trans_result == "0") {
-			$db_exchange->demand_edit('n',$did);
-			$db_exchange->demand_update_bal($exch_balance[0]["balance"] - $out_val,$wmt_purse);
-			$db_exchange->edit_bal_plus($in_val*(1+$$ex_input),$ex_input);
-			if($ex_input == 'EasyPay') {$db_exchange->edit_ep_return($purse_payment,$in_val*1.02);}
-		}
-		else {$db_exchange->demand_add_coment($kod_error,$did);}
-	}
-	break;
+                $trans_result = $class_WebMoney->return_translation_X14($id_pay,$out_val);
+                if($trans_result == "0") {
+                    $db_exchange->demand_edit('n',$did);
+                    $db_exchange->demand_update_bal($exch_balance[0]["balance"] - $out_val,$wmt_purse);
+                    $db_exchange->edit_bal_plus($in_val*(1+$$ex_input),$ex_input);
+                    if($ex_input == 'EasyPay') {$db_exchange->edit_ep_return($purse_payment,$in_val*1.02);}
+                }
+                else {$db_exchange->demand_add_coment($kod_error,$did);}
+            }
+            break;
 
-	case ("EasyPay") :
-		$summa = $out_val - $out_val*0.02;
-	$purse = $db_exchange->EP_purse_output($summa);
-	if(!empty($purse)) {
-		require_once($atm_dir."nncron/func_easypay.aspx");
-			//âûâîä ¹ êîøåëüêà íà êîò. áóäåò âûïîëíÿòüñÿ ïåðåâîä èëè àâòîðèçàöèÿ äëÿ ïðîâåðêè ïëàòåæà
-			$p = "EP".$purse[0]['acount'];
-			$pp = "PP".$purse[0]['acount'];
-		$class_EasyPay = new EasyPay();
-		$str_result = $class_EasyPay->direct_translation($purse[0]['acount'],$$p,$$pp,$purse_out,trim(sprintf("%8.0f ",$summa)),$did);
-		if($str_result == "TRANSFER_OK") {
-			$db_exchange->demand_edit('n',$did);
-			$db_exchange->edit_bal_minus($summa,$ex_output);
-			$db_exchange->edit_bal_plus($in_val*(1+$$ex_input),$ex_input);
-			$db_exchange->edit_ep_return_input($purse[0]['acount'],$summa);
-			$db_exchange->upd_time_dayout($purse[0]['acount']);
-			}
-			else {$db_exchange->demand_add_coment($str_result,$did);}
-	}
-	break;
-	default:
-endswitch;
+        case ("EasyPay") :
+            $summa = $out_val - $out_val*0.02;
+            $purse = $db_exchange->EP_purse_output($summa);
+            if(!empty($purse)) {
+                require_once($atm_dir."nncron/func_easypay.aspx");
+                //Ð²Ñ‹Ð²Ð¾Ð´ â„– ÐºÐ¾ÑˆÐµÐ»ÑŒÐºÐ° Ð½Ð° ÐºÐ¾Ñ‚. Ð±ÑƒÐ´ÐµÑ‚ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÑÑ‚ÑŒÑÑ Ð¿ÐµÑ€ÐµÐ²Ð¾Ð´ Ð¸Ð»Ð¸ Ð°Ð²Ñ‚Ð¾Ñ€Ð¸Ð·Ð°Ñ†Ð¸Ñ Ð´Ð»Ñ Ð¿Ñ€Ð¾Ð²ÐµÑ€ÐºÐ¸ Ð¿Ð»Ð°Ñ‚ÐµÐ¶Ð°
+                $p = "EP".$purse[0]['acount'];
+                $pp = "PP".$purse[0]['acount'];
+                $class_EasyPay = new EasyPay();
+                $str_result = $class_EasyPay->direct_translation($purse[0]['acount'],$$p,$$pp,$purse_out,trim(sprintf("%8.0f ",$summa)),$did);
+                if($str_result == "TRANSFER_OK") {
+                    $db_exchange->demand_edit('n',$did);
+                    $db_exchange->edit_bal_minus($summa,$ex_output);
+                    $db_exchange->edit_bal_plus($in_val*(1+$$ex_input),$ex_input);
+                    $db_exchange->edit_ep_return_input($purse[0]['acount'],$summa);
+                    $db_exchange->upd_time_dayout($purse[0]['acount']);
+                }
+                else {$db_exchange->demand_add_coment($str_result,$did);}
+            }
+            break;
+        default:
+    endswitch;
 }
 
-//ôóíêöèÿ îáíîâëåíèÿ áàëàíñà ïîñëå îïëàòû ïî óñëóãàì
+//Ñ„ÑƒÐ½ÐºÑ†Ð¸Ñ Ð¾Ð±Ð½Ð¾Ð²Ð»ÐµÐ½Ð¸Ñ Ð±Ð°Ð»Ð°Ð½ÑÐ° Ð¿Ð¾ÑÐ»Ðµ Ð¾Ð¿Ð»Ð°Ñ‚Ñ‹ Ð¿Ð¾ ÑƒÑÐ»ÑƒÐ³Ð°Ð¼
 function check_pay_eshop($did,$name_goods,$amount,$amount_goods) {
 
-	//$db = new CustomSQL($DBName);
-	//$db_exchange = new CustomSQL_exchange($DBName_exchange);
-	$db_pay_desk = new CustomSQL_pay_desk($DBName_pay_desk);
-//Èçìåíåíèå êîëè÷åñòâà òîâàðà
-	$amount_good = $db_pay_desk->sel_amount_good($name_goods);
-	$bal_upd = $amount_good[0]['balance'] - $amount_goods;
-	$db_pay_desk->upd_amount_good($name_goods,$bal_upd);
-return  "Payment_successfully";
+    //$db = new CustomSQL($DBName);
+    //$db_exchange = new CustomSQL_exchange($DBName_exchange);
+    $db_pay_desk = new CustomSQL_pay_desk($DBName_pay_desk);
+//Ð˜Ð·Ð¼ÐµÐ½ÐµÐ½Ð¸Ðµ ÐºÐ¾Ð»Ð¸Ñ‡ÐµÑÑ‚Ð²Ð° Ñ‚Ð¾Ð²Ð°Ñ€Ð°
+    $amount_good = $db_pay_desk->sel_amount_good($name_goods);
+    $bal_upd = $amount_good[0]['balance'] - $amount_goods;
+    $db_pay_desk->upd_amount_good($name_goods,$bal_upd);
+    return  "Payment_successfully";
 }
 
 function e_shop($did,$email,$name_goods,$pay_price,$pay_curr,$id_goods,$type_goods,$data,$time) {
-	include("../const.inc.aspx");
-	require("send_mail.aspx");
-	require($home_dir."mailer/smtp-func.aspx");
-	$db_pay_desk = new CustomSQL_pay_desk($DBName_pay_desk);
-switch ($type_goods) :
+    include("../const.inc.aspx");
+    require("send_mail.aspx");
+    require($home_dir."mailer/smtp-func.aspx");
+    $db_pay_desk = new CustomSQL_pay_desk($DBName_pay_desk);
+    switch ($type_goods) :
 
-	case ("pinkod") :
-$g = $db_pay_desk->select_goods($id_goods);
-	if(!empty($g)) {
-	$db_pay_desk->edit_st_goods($g[0]['id']);
-	$db_pay_desk->edit_count($id_goods);
-	$db_pay_desk->add_goods_dem($did,$g[0]['id']);
-	}
-	else {return "|ERROR_SELGOODS"; exit();}
-	break;
-	case ("pin_un") :
-$g = $db_pay_desk->select_goods($id_goods);
-	if(!empty($g)) {
-	$db_pay_desk->edit_st_goods($g[0]['id']);
-	$db_pay_desk->edit_count_un($id_goods);
-	$db_pay_desk->add_goods_dem($did,$g[0]['id']);
-	}
-	else {return "|ERROR_SELGOODS"; exit();}
-	break;
-	default:
-endswitch;
-	$body = badyMail($did,$type_goods,$name_goods,$pay_price,$pay_curr,$g[0][1],$data,$time,$icq,$support);
-	smtpmail($email,"Ïîêóïêà òîâàðà â Èíòåðíåò-ìàãàçèíå Shop.wm-rb.net",$body,"Èíòåðíåò-ìàãàçèí Shop.wm-rb.net");
-return  "Payment_successfully";
+        case ("pinkod") :
+            $g = $db_pay_desk->select_goods($id_goods);
+            if(!empty($g)) {
+                $db_pay_desk->edit_st_goods($g[0]['id']);
+                $db_pay_desk->edit_count($id_goods);
+                $db_pay_desk->add_goods_dem($did,$g[0]['id']);
+            }
+            else {return "|ERROR_SELGOODS"; exit();}
+            break;
+        case ("pin_un") :
+            $g = $db_pay_desk->select_goods($id_goods);
+            if(!empty($g)) {
+                $db_pay_desk->edit_st_goods($g[0]['id']);
+                $db_pay_desk->edit_count_un($id_goods);
+                $db_pay_desk->add_goods_dem($did,$g[0]['id']);
+            }
+            else {return "|ERROR_SELGOODS"; exit();}
+            break;
+        default:
+    endswitch;
+    $body = badyMail($did,$type_goods,$name_goods,$pay_price,$pay_curr,$g[0][1],$data,$time,$icq,$support);
+    smtpmail($email,"ÐŸÐ¾ÐºÑƒÐ¿ÐºÐ° Ñ‚Ð¾Ð²Ð°Ñ€Ð° Ð² Ð˜Ð½Ñ‚ÐµÑ€Ð½ÐµÑ‚-Ð¼Ð°Ð³Ð°Ð·Ð¸Ð½Ðµ Shop.wm-rb.net",$body,"Ð˜Ð½Ñ‚ÐµÑ€Ð½ÐµÑ‚-Ð¼Ð°Ð³Ð°Ð·Ð¸Ð½ Shop.wm-rb.net");
+    return  "Payment_successfully";
 }
 ?>

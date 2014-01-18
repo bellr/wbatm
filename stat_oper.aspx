@@ -87,7 +87,8 @@ function nc(url) {
 	<option value="2010">2010</option>
 	<option value="2011">2011</option>
 	<option value="2012">2012</option>
-	<option value="2013" selected="selected">2013</option>
+	<option value="2013">2013</option>
+    <option value="2014" selected="selected">2014</option>
 	</select>
 <b>&nbsp;&nbsp;по :&nbsp;&nbsp;</b>
 			<select name="day_k">
@@ -117,7 +118,8 @@ function nc(url) {
 	<option value="2010">2010</option>
 	<option value="2011">2011</option>
 	<option value="2012">2012</option>
-	<option value="2013" selected="selected">2013</option>
+	<option value="2013">2013</option>
+    <option value="2014" selected="selected">2014</option>
 	</select>
 	<br /><br />
 	<center><input type="submit" name="sel_mount" value="Показать" style="width:100px; "onmouseover="this.style.backgroundColor='#E8E8FF';" onmouseout="this.style.backgroundColor='#f3f7ff';" id="cursor">&nbsp;</center>
@@ -158,7 +160,7 @@ $WMB_in = "0"; $WMB_out = "0";
 $EasyPay_in = "0"; $EasyPay_out = "0";
 $YaDengi_in = "0"; $YaDengi_out = "0";
 
-$unachieved_demand = dataBase::DBexchange()->select('demand','did,ex_output,ex_input,out_val,in_val,add_date,status,partner_id','where add_date BETWEEN '.$data_n.' and '.$data_k,'order by add_date asc');
+$unachieved_demand = dataBase::DBexchange()->select('demand','did,ex_output,ex_input,out_val,in_val,add_date,status,partner_id','where add_date BETWEEN '.$data_n.' and '.$data_k,'order by add_date desc');
 if(!empty($unachieved_demand)) {$cdem=0;
 echo "
              <tr bgcolor=\"#CCCCCC\" align=\"center\">
@@ -172,7 +174,10 @@ echo "
               </tr>
 ";
 		foreach($unachieved_demand as $arr) {
-		$tag = sFormatData::formatStatus($arr['status']);
+            //Model::Demand('HOME')->get
+            //sFormatData::formatStatus
+		$status_name = swDemand::$status_name[$arr['status']];
+        $status_class = swDemand::$status_class[$arr['status']];
 
 	if($arr['status'] == 'y') {
 	$cdem++;
@@ -201,7 +206,7 @@ endswitch;
 		<td>{$arr['out_val']} {$arr['ex_output']}</td>
 		<td>{$arr['in_val']} {$arr['ex_input']}</td>
 		<td>".date('d.m.Y H:i:s',$arr['add_date'])."</td>
-		<td>{$tag}</td>
+		<td><b class=\"{$status_class}\">{$status_name}</b></td>
 		<td><a href=\"http://atm.wm-rb.net/partner.aspx?id={$arr['partner_id']}\">{$arr['partner_id']}</a></td>
 	</tr>";
 		}
@@ -240,7 +245,10 @@ echo "
               </tr>
 ";
 		foreach($unachieved_demand as $arr) {
-			$tag = sFormatData::formatStatus($arr['status']);
+
+            $status_name = swDemand::$status_name[$arr['status']];
+            $status_class = swDemand::$status_class[$arr['status']];
+
 	if($arr['status'] == 'y') {
 		if($arr['name_uslugi'] == 'Megashare') {$Megashare = $Megashare + $arr['in_val'];}
 		else {$p = $p + $arr['in_val'];}
@@ -251,7 +259,7 @@ echo "
 		<td>{$arr['out_val']} {$arr['output']}</td>
 		<td>{$arr['in_val']} BLR</td>
 		<td>".date('d.m.Y H:i:s',$arr['add_date'])."</td>
-		<td>{$tag}</td>
+		<td><b class=\"{$status_class}\">{$status_name}</b></td>
 		<td><a href=\"http://atm.wm-rb.net/partner.aspx?id={$arr['partner_id']}\">{$arr['partner_id']}</a></td>
 	</tr>";
 		}
@@ -288,14 +296,16 @@ echo "
 ";
 		foreach($unachieved_demand as $arr) {
 			$goods_info = $db_pay_desk->goods_info($arr['id_goods']);
-			$tag = sFormatData::formatStatus($arr['7']);
+
+            $status_name = swDemand::$status_name[$arr['status']];
+            $status_class = swDemand::$status_class[$arr['status']];
 
 	echo "<tr bgcolor=\"#FFFFFF\" align=center>
 		<td><a href=\"search_eshop_d.aspx?did={$arr['0']}\">{$arr['0']}</a></td>
 		<td>{$goods_info[0]['name_card']}</td>
 		<td>{$arr['amount']} {$arr['output']}</td>
 		<td>{$arr['data']} {$arr['time']}</td>
-		<td>{$tag}</td>
+		<td><b class=\"{$status_class}\">{$status_name}</b></td>
 		<td><a href=\"http://atm.wm-rb.net/partner.aspx?id={$arr['partner_id']}\">{$arr['partner_id']}</a></td>
 	</tr>";
 		}
@@ -329,14 +339,17 @@ echo "
               </tr>
 ";
 		foreach($unachieved_demand as $arr) {
-			$tag = sFormatData::formatStatus($arr['status']);
+
+            $status_name = swDemand::$status_name[$arr['status']];
+            $status_class = swDemand::$status_class[$arr['status']];
+
 	echo "<tr bgcolor=\"#FFFFFF\" align=center>
 		<td><a href=\"search_cash_d.aspx?did={$arr['did']}\">{$arr['did']}</a></td>
 		<td>{$arr['output']}</td>
 		<td>{$arr['out_val']} BLR</td>
 		<td>{$arr['in_val']} {$arr['input']}</td>
 		<td>".date('d.m.Y H:i:s',$arr['add_date'])."</td>
-		<td>{$tag}</td>
+		<td><b class=\"{$status_class}\">{$status_name}</b></td>
 		<td><a href=\"http://atm.wm-rb.net/partner.aspx?id={$arr['partner_id']}\">{$arr['partner_id']}</a></td>
 	</tr>";
 		}
@@ -368,7 +381,10 @@ echo "
 $summa_belbank = 0;
 $summa_bpsb = 0;
 		foreach($unachieved_demand as $arr) {
-			$tag = sFormatData::formatStatus($arr['7']);
+
+            $status_name = swDemand::$status_name[$arr['status']];
+            $status_class = swDemand::$status_class[$arr['status']];
+
 	if($arr['7'] == 'y') {
 		if($arr['4'] == 'belbank') $summa_belbank = $summa_belbank + $arr['2'];
 		if($arr['4'] == 'bpsb') $summa_bpsb = $summa_bpsb + $arr['2'];
@@ -379,7 +395,7 @@ $summa_bpsb = 0;
 		<td>{$arr['3']} {$arr['1']}</td>
 		<td>{$arr['2']} BLR</td>
 		<td>{$arr['5']} {$arr['6']}</td>
-		<td>{$tag}</td>
+		<td><b class=\"{$status_class}\">{$status_name}</b></td>
 		<td><a href=\"http://atm.wm-rb.net/partner.aspx?id={$arr['8']}\">{$arr['8']}</a></td>
 	</tr>
 	<tr>";

@@ -1,32 +1,31 @@
 <?php
 
-//include("const.inc.aspx");
-$DBHost = "localhost";
-$DBName = "wmrb_main";
-$DBUser = "main_base";
-$DBPassword = "Dst627";
+$DBHost = Config::$dbBase['DBmain']['host'];
+$DBName = Config::$dbBase['DBmain']['db'];
+$DBUser = Config::$dbBase['DBmain']['user'];
+$DBPassword = Config::$dbBase['DBmain']['pass'];
 
-$DBName_exchange = "wmrb_exchange";
-$DBUser_exchange = "exch";
-$DBPassword_exchange = "16201986";
+$DBName_exchange = Config::$dbBase['DBexchange']['db'];
+$DBUser_exchange = Config::$dbBase['DBexchange']['user'];
+$DBPassword_exchange = Config::$dbBase['DBexchange']['pass'];
 
-$DBName_admin = "wmrb_admin";
-$DBUser_admin = "admin";
-$DBPassword_admin = "dbnfkbq1986";
+$DBName_admin = Config::$dbBase['DBadmin']['db'];
+$DBUser_admin = Config::$dbBase['DBadmin']['user'];
+$DBPassword_admin = Config::$dbBase['DBadmin']['pass'];
 
-$DBName_pay_desk = "wmrb_paydesk";
-$DBUser_pay_desk = "paydesk";
-$DBPassword_pay_desk = "Dst628";
+$DBName_pay_desk = Config::$dbBase['DBpaydesk']['db'];
+$DBUser_pay_desk = Config::$dbBase['DBpaydesk']['user'];
+$DBPassword_pay_desk = Config::$dbBase['DBpaydesk']['pass'];
 
-//йкюяя дкъ пюанрш я цкюбмни аюгни
+//О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫ О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫
 Class DBSQL
 {
 
    function DBSQL($DBName)
    {
       global $DBHost,$DBUser,$DBPassword;
-      $conn=@mysql_connect($DBHost,$DBUser,$DBPassword);
-	  @mysql_select_db($DBName,$conn);
+      $conn=mysql_connect($DBHost,$DBUser,$DBPassword);
+	  mysql_select_db($DBName,$conn);
 	  mysql_query("SET CHARACTER SET CP1251",$conn);
 	  $this->CONN = $conn;
       return true;
@@ -129,15 +128,15 @@ Class DBSQL
 
 }
 
-//йкюяя дкъ пюанрш я аюгни EXCHENGE
+//О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫ О©╫ О©╫О©╫О©╫О©╫О©╫ EXCHENGE
 Class DBSQL_exchange
 {
 
    function DBSQL_exchange($DBName_exchange)
    {
       global $DBHost,$DBUser_exchange,$DBPassword_exchange;
-      $conn=@mysql_connect($DBHost,$DBUser_exchange,$DBPassword_exchange);
-	  @mysql_select_db($DBName_exchange,$conn);
+      $conn=mysql_connect($DBHost,$DBUser_exchange,$DBPassword_exchange);
+	  mysql_select_db($DBName_exchange,$conn);
 	  mysql_query("SET CHARACTER SET CP1251",$conn);
 	  $this->CONN = $conn;
       return true;
@@ -241,7 +240,7 @@ Class DBSQL_exchange
 
 }
 
-//йкюяя дкъ пюанрш я аюгни ADMIN
+//О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫ О©╫ О©╫О©╫О©╫О©╫О©╫ ADMIN
 Class DBSQL_admin
 {
 
@@ -351,7 +350,7 @@ Class DBSQL_admin
    }
 
 }
-//йкюяя дкъ пюанрш я аюгни PAY-DESK
+//О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫ О©╫ О©╫О©╫О©╫О©╫О©╫ PAY-DESK
 Class DBSQL_pay_desk
 {
 

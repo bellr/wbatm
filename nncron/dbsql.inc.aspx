@@ -1,24 +1,24 @@
 <?php
 
 //include("const.inc.aspx");
-$DBHost = "localhost";
-$DBName = "wmrb_main";
-$DBUser = "main_base";
-$DBPassword = "Dst627";
+$DBHost = Config::$dbBase['DBmain']['host'];
+$DBName = Config::$dbBase['DBmain']['db'];
+$DBUser = Config::$dbBase['DBmain']['user'];
+$DBPassword = Config::$dbBase['DBmain']['pass'];
 
-$DBName_exchange = "wmrb_exchange";
-$DBUser_exchange = "exch";
-$DBPassword_exchange = "16201986";
+$DBName_exchange = Config::$dbBase['DBexchange']['db'];
+$DBUser_exchange = Config::$dbBase['DBexchange']['user'];
+$DBPassword_exchange = Config::$dbBase['DBexchange']['pass'];
 
-$DBName_admin = "wmrb_admin";
-$DBUser_admin = "admin";
-$DBPassword_admin = "dbnfkbq1986";
+$DBName_admin = Config::$dbBase['DBadmin']['db'];
+$DBUser_admin = Config::$dbBase['DBadmin']['user'];
+$DBPassword_admin = Config::$dbBase['DBadmin']['pass'];
 
-$DBName_pay_desk = "wmrb_paydesk";
-$DBUser_pay_desk = "paydesk";
-$DBPassword_pay_desk = "Dst628";
+$DBName_pay_desk = Config::$dbBase['DBpaydesk']['db'];
+$DBUser_pay_desk = Config::$dbBase['DBpaydesk']['user'];
+$DBPassword_pay_desk = Config::$dbBase['DBpaydesk']['pass'];
 
-//ÊËÀÑÑ ÄËß ÐÀÁÎÒÛ Ñ ÃËÀÂÍÎÉ ÁÀÇÎÉ
+//ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½
 Class DBSQL
 {
 
@@ -128,7 +128,7 @@ Class DBSQL
 
 }
 
-//ÊËÀÑÑ ÄËß ÐÀÁÎÒÛ Ñ ÁÀÇÎÉ EXCHENGE
+//ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ EXCHENGE
 Class DBSQL_exchange
 {
 
@@ -239,7 +239,7 @@ Class DBSQL_exchange
 
 }
 
-//ÊËÀÑÑ ÄËß ÐÀÁÎÒÛ Ñ ÁÀÇÎÉ ADMIN
+//ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ADMIN
 Class DBSQL_admin
 {
 
@@ -348,7 +348,7 @@ Class DBSQL_admin
    }
 
 }
-//ÊËÀÑÑ ÄËß ÐÀÁÎÒÛ Ñ ÁÀÇÎÉ PAY-DESK
+//ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ PAY-DESK
 Class DBSQL_pay_desk
 {
 

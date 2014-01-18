@@ -34,7 +34,7 @@ $count_cheque_er = $db->count_cheque('er');
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta content="none" name="ROBOTS">
-<meta http-equiv="refresh" content="<? echo "$refresh"; ?>; URL=http://atm.wm-rb.net/admin_index.aspx">
+<meta http-equiv="refresh" content="<? echo "$refresh"; ?>; URL=admin_index.aspx">
 <link rel="stylesheet" href="http://atm.wm-rb.net/style/style.css" type="text/css">
 </head>
 

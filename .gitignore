@@ -1,5 +1,5 @@
 /.idea/
-/cache/
+/index.php
 
 # except do not ignore .gitignore
 !.gitignore

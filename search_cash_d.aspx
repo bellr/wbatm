@@ -115,7 +115,7 @@ echo "
 	<td width=\"50%\" align=\"left\" valign=middle>
 	<form method=\"post\" action=\"search_cash_d.aspx?did=$did\">";
 	echo "<select name=\"status\">";
-		echo sFormatData::getStatusList($info[0]["status"]);
+		echo swDemand::getStatusList($info[0]["status"]);
 	echo "</select>
 	<input type=\"submit\" name=\"change_status\" value=\"Изменить\"/><br /><br /></form>
 	<form method=\"post\" action=\"nncron/constructor_inpay.aspx?did=$did\">

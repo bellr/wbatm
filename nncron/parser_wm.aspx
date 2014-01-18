@@ -1,7 +1,9 @@
 <?
 define('VS_DEBUG',true);
+define('PROJECT_ROOT',dirname(dirname(__FILE__)));
 define('PROJECT','ATM');
-require_once("../../core/vs.php");
+
+require_once(dirname(PROJECT_ROOT)."/core/vs.php");
 
 set_time_limit(0);
 ignore_user_abort(1);

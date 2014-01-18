@@ -2,21 +2,22 @@
 
 require("customsql.inc.aspx");
 
-//$db = new CustomSQL($DBName);
-$db_exchange = new CustomSQL_exchange($DBName_exchange);
 $db_pay_desk = new CustomSQL_pay_desk($DBName_pay_desk);
+
 if (!empty($_POST['exch_bal_edit'])) {
-if($_POST['st_exch']) $st_exch = 1;
-else $st_exch = 0;
-if($_POST['st_pay']) $st_pay = 1;
-else $st_pay = 0;
-if($_POST['st_cash']) $st_cash = 1;
-else $st_cash = 0;
-if($_POST['st_out_nal']) $st_out_nal = 1;
-else $st_out_nal = 0;
-if($_POST['st_eshop']) $st_eshop = 1;
-else $st_eshop = 0;
-$db_exchange->exch_bal_edit($_POST['id'],$_POST['balance'],$st_exch,$st_pay,$st_cash,$st_out_nal,$st_eshop,$_POST['purse']);
+
+    $data['st_exch'] = $_POST['st_exch'] ? 1 : 0;
+    $data['st_pay'] = $_POST['st_pay'] ? 1 : 0;
+    $data['st_cash'] = $_POST['st_cash'] ? 1 : 0;
+    $data['st_out_nal'] = $_POST['st_out_nal'] ? 1 : 0;
+    $data['st_eshop'] = $_POST['st_eshop'] ? 1 : 0;
+    $data['balance'] = $_POST['balance'];
+    $data['purse'] = $_POST['purse'];
+
+    dataBase::DBexchange()->update('balance',$data,array(
+        'id' => $_POST['id']
+    ));
+
  }
 if (!empty($_POST['card_bal_edit'])) {
 if($_POST['status']) $status = 1;
@@ -31,7 +32,7 @@ $db_pay_desk->goods_bal_edit($_POST['id'],$_POST['balance'],$status);
 ?>
 <html>
 <head>
-<title>Редактирование балансов э/в</title>
+<title>Балансы э/в</title>
 <meta http-equiv="Content-Type" content="text/html; charset=win-1251">
 <link rel="stylesheet" href="style/style.css" type="text/css">
 <meta content="none" name="ROBOTS">
@@ -64,37 +65,31 @@ $db_pay_desk->goods_bal_edit($_POST['id'],$_POST['balance'],$status);
 	<td></td>
 	</tr>
 <?
-		$result = $db_exchange->exch_bal_sel();
 
-		foreach($result as $arr)
-		{
-	        $id = $arr['0'];
-	        $name = $arr['1'];
-	        $balance = $arr['2'];
-			$st_exch = $arr['3'];
-			$st_pay = $arr['4'];
-			$st_cash = $arr['5'];
-			$st_out_nal = $arr['6'];
-			$st_eshop = $arr['7'];
-			$purse = $arr['8'];
+    $result = dataBase::DBexchange()->select('balance',
+        'id,name,balance,st_exch,st_pay,st_cash,st_out_nal,st_eshop,purse',
+        'order by id ASC'
+    );
+
+		foreach($result as $arr) {
 
 		echo "<form action=\"exch_balance.aspx\" method=\"POST\" style=\"display:inline;\">
 		<tr>
-		<td style=\"border-bottom: #aaaaaa 1px solid;\" align=\"right\">$name</td>
-		<td style=\"border-bottom: #aaaaaa 1px solid;\" align=\"left\"><input type=\"text\" name=\"balance\" value=$balance></td>
-		<td style=\"border-bottom: #aaaaaa 1px solid;\" align=\"left\"><input type=\"text\" name=\"purse\" value=$purse></td>
-		<td style=\"border-bottom: #aaaaaa 1px solid;\" align=\"center\"><input type=\"checkbox\" name=\"st_exch\""; if($st_exch == 1) echo " checked=1";
+		<td style=\"border-bottom: #aaaaaa 1px solid;\" align=\"right\">{$arr['name']}</td>
+		<td style=\"border-bottom: #aaaaaa 1px solid;\" align=\"left\"><input type=\"text\" name=\"balance\" value={$arr['balance']}></td>
+		<td style=\"border-bottom: #aaaaaa 1px solid;\" align=\"left\"><input type=\"text\" name=\"purse\" value={$arr['purse']}></td>
+		<td style=\"border-bottom: #aaaaaa 1px solid;\" align=\"center\"><input type=\"checkbox\" name=\"st_exch\""; if($arr['st_exch'] == 1) echo " checked=1";
 		echo "></td>
-		<td style=\"border-bottom: #aaaaaa 1px solid;\" align=\"center\"><input type=\"checkbox\" name=\"st_pay\""; if($st_pay == 1) echo " checked=1";
+		<td style=\"border-bottom: #aaaaaa 1px solid;\" align=\"center\"><input type=\"checkbox\" name=\"st_pay\""; if($arr['st_pay'] == 1) echo " checked=1";
 		echo "></td>
-		<td style=\"border-bottom: #aaaaaa 1px solid;\" align=\"center\"><input type=\"checkbox\" name=\"st_cash\""; if($st_cash == 1) echo " checked=1";
+		<td style=\"border-bottom: #aaaaaa 1px solid;\" align=\"center\"><input type=\"checkbox\" name=\"st_cash\""; if($arr['st_cash'] == 1) echo " checked=1";
 		echo "></td>
-		<td style=\"border-bottom: #aaaaaa 1px solid;\" align=\"center\"><input type=\"checkbox\" name=\"st_out_nal\""; if($st_out_nal == 1) echo " checked=1";
+		<td style=\"border-bottom: #aaaaaa 1px solid;\" align=\"center\"><input type=\"checkbox\" name=\"st_out_nal\""; if($arr['st_out_nal'] == 1) echo " checked=1";
 		echo "></td>
-		<td style=\"border-bottom: #aaaaaa 1px solid;\" align=\"center\"><input type=\"checkbox\" name=\"st_eshop\""; if($st_eshop == 1) echo " checked=1";
+		<td style=\"border-bottom: #aaaaaa 1px solid;\" align=\"center\"><input type=\"checkbox\" name=\"st_eshop\""; if($arr['st_eshop'] == 1) echo " checked=1";
 		echo "></td>
 		<td style=\"border-bottom: #aaaaaa 1px solid;\" align=\"left\"><input type=\"submit\" name=\"exch_bal_edit\" value=\"Изменить\">
-					<input type=\"hidden\" name=\"id\" value=$id></td>
+					<input type=\"hidden\" name=\"id\" value={$arr['id']}></td>
 		</tr></form>\n";
 
 		}
@@ -120,7 +115,7 @@ $db_pay_desk->goods_bal_edit($_POST['id'],$_POST['balance'],$status);
 
 		foreach($card_bal_sel as $arr)
 		{
-	        $id = $arr['0'];
+	        $arr['id'] = $arr['0'];
 	        $desc_val = $arr['1'];
 	        $balance = $arr['2'];
 			$status = $arr['3'];

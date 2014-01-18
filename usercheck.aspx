@@ -7,7 +7,7 @@ if (!empty($_POST[logincheck])){
 	$db_admin = new CustomSQL_admin($DBName_admin);
 	$checkuser = md5($_POST[user]);
 	$checkpass = md5($_POST[pass]);
-	$sql = "select username from useradmin where username='$checkuser' and password='$checkpass'";
+	$sql = "select username from useradmin where username='{$checkuser}' and password='{$checkpass}'";
 	$results = $db_admin->select($sql);
 	if (empty($results)) {
 		print "Error";
@@ -80,9 +80,6 @@ if (count($HTTP_GET_VARS)) {
   </tr>
 </table>
 </form>
-<?php
-include("include/bottom.aspx");
-?>
 </body>
 </html>
 <?php

@@ -1,10 +1,13 @@
 <?
 define('PROJECT','ATM');
+define('PROJECT_ROOT',dirname(dirname(__FILE__)));
 define('VS_DEBUG',true);
-require_once("../../core/vs.php");
+
+require_once(dirname(PROJECT_ROOT)."/core/vs.php");
 
 Config::getSysMessages();
-$old_demand = time() - Config::$wmBase['demand_deadlines'] + 24 * 3600;
+$PP = Extension::Payments()->getParam('payments','webmoney');
+$old_demand = time() - $PP->demand_deadlines + 24 * 3600;
 
 /* echo strtotime('2013-06-18 12:49')."<br>";
 //echo date('Y-m-d H:i:s',strtotime('2013-06-18 12:49'));
@@ -18,18 +21,20 @@ if(!empty($info)) {
 
 	foreach($info as $ar) {
 
-		$str = eEasyPay::connect_history_easypay($ar['purse_payment'],'1');
-		$date_pay = strtotime(sParseResult::parserSumRefill(number_format(round($ar['out_val']), 0, '.', ' '),$str));
+		$str = Extension::Payments()->EasyPay()->connect_history_easypay($ar['purse_payment'],'1');
+		$date_pay = strtotime(Extension::Payments()->EasyPay()->parserSumRefill(number_format(round($ar['out_val']), 0, '.', ' '),$str));
 		
-$log = 'DID '.$ar['did'].', date from easypay '.sParseResult::parserSumRefill(number_format(round($ar['out_val']), 0, '.', ' '),$str).', real data '.date('Y-m-d H:i',$date_pay).', unix time '.$date_pay;
+$log = 'DID '.$ar['did'].', date from easypay '.Extension::Payments()->EasyPay()->parserSumRefill(number_format(round($ar['out_val']), 0, '.', ' '),$str).', real data '.date('Y-m-d H:i',$date_pay).', unix time '.$date_pay;
 vsLog::add($log,'bill_post');
 
 		if($date_pay) {
 			$check_pay = dataBase::DBpaydesk()->select('demand_cash','did','where pay_date='.$date_pay);
 			if(empty($check_pay)) {
 			
-				dataBase::DBpaydesk()->update('demand_cash',array('pay_date'=>$date_pay),'where did='.$ar['did']);
-				Model::EasyPay()->updateAcountRefill($ar['purse_payment'],$ar['out_val']);
+				dataBase::DBpaydesk()->update('demand_cash',array('pay_date'=>$date_pay),array(
+                    'did' => $ar['did']
+                ));
+				Model::Acount_easypay()->updateAcountRefill($ar['purse_payment'],$ar['out_val']);
 				
 				$ip = dataBase::DBadmin()->select('id_payment','id_pay','where did='.$ar['did']);
 				$params['ex_input'] = $ar['input'];
@@ -75,7 +80,7 @@ if(!empty($info)) {
 				$result = check_payment($ar['input'],$ar['purse_in'],$ar['in_val'],$desc_pay,$ar['did'],$id_pay[0]['id_pay'],'NAL');
 			}
 			else {
-				$db_pay_desk->cash_add_coment('Баланс обмениваемой валюты уменьшился в процессе обмена. Администрация оповещена об ошибке.',$ar['did']); exit();
+				$db_pay_desk->cash_add_coment('пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.',$ar['did']); exit();
 			}
 		}
 	}

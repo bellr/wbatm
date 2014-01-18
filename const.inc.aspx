@@ -1,7 +1,8 @@
 <?php
 define('PROJECT','ATM');
+define('PROJECT_ROOT',dirname(__FILE__));
 define('VS_DEBUG',true);
-require_once("/var/www/wmrb/data/www/core/vs.php");
+require_once(dirname(PROJECT_ROOT)."/core/vs.php");
 
 Vitalis::RouterAdmin();
 

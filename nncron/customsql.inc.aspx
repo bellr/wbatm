@@ -363,19 +363,7 @@ function sel_repet() {
       $result = $this->select($sql);
       return $result;
    }
-//вывод заявок со статусом n
-   function sel_del_dem($data_1,$data_2)
-   {
-      $sql = "select did from demand where status='n' and (data='$data_1' or data='$data_2')";
-      $results = $this->select($sql);
-      return $results;
-   }
-//удаления просроченных заявок со статусом N
- function del_demand($did)
-   {
-      $sql = "delete from demand where did='$did'";
-      $result = $this->delete($sql);
-   }
+
 //вывод всех балансов
    function sel_cash_bal()
    {
@@ -618,58 +606,7 @@ Class CustomSQL_pay_desk extends DBSQL_pay_desk
       $result = $this->select($sql);
       return $result;
    }
-//вывод заявок со статусом n
-   function sel_del_dem($data_1,$data_2)
-   {
-      $sql = "select did from demand_uslugi where status='n' and (data='$data_1' or data='$data_2')";
-      $results = $this->select($sql);
-      return $results;
-   }
-//вывод заявок со статусом n(МАГАЗИН)
-   function del_dem_eshop($data_1,$data_2)
-   {
-      $sql = "select did from demand_eshop where status='n' and (data='$data_1' or data='$data_2')";
-      $results = $this->select($sql);
-      return $results;
-   }
-//удаления просроченных заявок со статусом N
- function del_demand($did)
-   {
-      $sql = "delete from demand_uslugi where did='$did'";
-      $this->insert($sql);
-   }
-//удаления просроченных заявок со статусом N(МАГАЗИН)
- function del_demand_eshop($did)
-   {
-      $sql = "delete from demand_eshop where did='$did'";
-      $this->insert($sql);
-   }
-//вывод заявок со статусом n
-   function sel_del_dem_nal($data_1,$data_2)
-   {
-      $sql = "select did from demand_cash where status='n' and (data='$data_1' or data='$data_2')";
-      $results = $this->select($sql);
-      return $results;
-   }
-//вывод заявок со статусом n для удаления
-   function sel_del_dem_out($data_1,$data_2)
-   {
-      $sql = "select did from demand_nal_out where status='n' and (data='$data_1' or data='$data_2')";
-      $results = $this->select($sql);
-      return $results;
-   }
-//удаления просроченных заявок со статусом N
- function del_demand_nal($did)
-   {
-      $sql = "delete from demand_cash where did='$did'";
-      $this->insert($sql);
-   }
-//удаления просроченных заявок со статусом N
- function del_demand_out($did)
-   {
-      $sql = "delete from demand_nal_out where did='$did'";
-      $this->insert($sql);
-   }
+
 //вывод заявок со статусом y для расчета партнерки
    function partner_dem($data_start,$data_end)
    {
