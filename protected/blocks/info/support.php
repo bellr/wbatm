@@ -25,7 +25,7 @@ class support extends Template {
 			$support = dataBase::DBadmin()->select('support',
 				'*',
 				"where id=".$P->id." or owner_id=0".$P->id,
-                'order by add_date desc'
+                'order by add_date asc'
 			);
             $this->vars['action'] = 'update_message';
 
@@ -42,9 +42,6 @@ class support extends Template {
 		
 			$this->vars['form'] = $this->iterate_tmpl('info',__CLASS__,'form',$this->vars);
 		}
-
-
-        
 
         return $this;
     }
@@ -69,7 +66,7 @@ class support extends Template {
                     $mail->message = $this->iterate_tmpl('emails',Config::getLang(),'add_message_support',array(
                         'bottom_support' => $this->iterate_tmpl('emails',Config::getLang(),'bottom_support'),
                         'indeficator' => $P->indeficator,
-                        'url' => Config::$base['STATIC_URL'].'/support/'.$P->indeficator.'/',
+                        'url' => Config::$base['HOME_URL'].'/support/'.$P->indeficator.'/',
                     ));
                     $mail->smtpmail();
 

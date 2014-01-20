@@ -24,11 +24,11 @@ class history_data extends Template {
 
 		$s = "/<div class=\"balance_value\" id=\"balance_value\">([0-9\ ]+) руб.<\/div>+/i";
 		preg_match($s,$str,$b);
-		
-		$res = '<b>Полученный баланс</b> - '.$b[1].'<br />';
-		$res .= $str;
 
-		return json_encode(array('status'=>0,'message'=>'Готово','html'=>$res));
+		$res = '<b>Полученный баланс</b> - '.$b[1].'<br />';
+		$res .= str_replace('script','',$str);
+
+		echo json_encode(array('status' => 0, 'message' => 'Готово', 'html' => $res, 'appendElement' => 'content'));
 	}
 }
 

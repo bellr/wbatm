@@ -14,13 +14,14 @@ function parse($ids) {
 	return implode(',',$id_str);
 }
 
-$PP = Extension::Payments()->getParam('payments','webmoney');
+$PP = Extension::Payments()->getParam('payments');
 $check_date = time() - $PP->payment_deadlines_P;
 $old_demand = time() - 2 * 24 * 3600;
 
 //delete demand on exchange
-dataBase::DBexchange()->update('demand',array('status'=>'n'),'where status="p" and add_date<'.$check_date);
+dataBase::DBexchange()->update('demand',array('status'=>'n'),'where status="p" and add_date < '.$check_date);
 $ids = dataBase::DBexchange()->select('demand','did','where status="n" and add_date<'.$old_demand);
+
 if(!empty($ids)) {
 	$str_ids = parse($ids);
 	dataBase::DBexchange()->delete('demand','where did in('.$str_ids.')');
