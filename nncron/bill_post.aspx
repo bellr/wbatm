@@ -19,6 +19,8 @@ $info = dataBase::DBpaydesk()->select('demand_cash','did,output,input,purse_in,o
 
 if(!empty($info)) {
 
+    $curl = Extension::Rest(Config::$base['HOME_URL'].'/api/CheckPayment/resultCheckPayment/');
+
 	foreach($info as $ar) {
 
 		$str = Extension::Payments()->EasyPay()->connect_history_easypay($ar['purse_payment'],'1');
@@ -46,7 +48,10 @@ vsLog::add($log,'bill_post');
 				$params['desc_pay'] = "Refill the electronic count: ".$ar['input'].", DID".$ar['did'].", bill merchant : ".$ip[0]['id_pay'];
 				$params['did'] = $ar['did'];
 
-				$status = gcCheckPayment::resultCheckPayment($params);
+				//$status = gcCheckPayment::resultCheckPayment($params);
+                $curl->post($params);
+                $curl->execute();
+
 
 			} else {
 				$value['status'] = 'er';
