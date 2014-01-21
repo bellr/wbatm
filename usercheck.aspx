@@ -1,29 +1,40 @@
 <?php
+
+//if($_GET['sk'] != 'atomly') exit;
+
 session_start();
 //include($atm_dir."nncron/protection.aspx");
 
 //addIP();
-if (!empty($_POST[logincheck])){
+if (!empty($_POST[logincheck])) {
 	$db_admin = new CustomSQL_admin($DBName_admin);
 	$checkuser = md5($_POST[user]);
 	$checkpass = md5($_POST[pass]);
 	$sql = "select username from useradmin where username='{$checkuser}' and password='{$checkpass}'";
 	$results = $db_admin->select($sql);
 	if (empty($results)) {
-		print "Error";
+		//print "Error";
 		exit;
 		}else{
 			$_SESSION['loginuser'] = $checkpass;
 
 	}
-} else {
-//echo "fdfdsfdfd";
-	//header("Location: http://atm.wm-rb.net/");
-	//exit();
 }
+
+if($_GET['action'] == 'logout') {
+
+    session_unset();
+    header("Location: http://atm.wm-rb.dev/?sk=atomly");
+    exit;
+}
+
 ?>
 <?php
-if (!(isset($_SESSION['loginuser']))){
+
+if (!(isset($_SESSION['loginuser']))) {
+
+    if ($_GET['sk'] != 'atomly') exit;
+
 ?>
 <html>
 <head>

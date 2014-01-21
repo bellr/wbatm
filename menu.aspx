@@ -146,7 +146,7 @@ if(id) id.style.display=id.style.display=='none'?'block':'none';
   </tr>
 
 <tr>
-    <td bgcolor="#99ccff"><a target="_parent" href="exit.aspx" class="en_b">Выход</a></td>
+    <td bgcolor="#99ccff"><a target="_parent" href="/?action=logout" class="en_b">Выход</a></td>
   </tr>
 </table>
 </body>

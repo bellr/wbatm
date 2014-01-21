@@ -1,6 +1,7 @@
 <?php
 
 require("customsql.inc.aspx");
+include("usercheck.aspx");
 
 $db_pay_desk = new CustomSQL_pay_desk($DBName_pay_desk);
 
