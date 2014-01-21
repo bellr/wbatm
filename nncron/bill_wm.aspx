@@ -6,7 +6,6 @@ require_once("../../core/vs.php");
 
 $res = dataBase::DBexchange()->select('demand','did,ex_output,ex_input,out_val,in_val,purse_in','where status="p"');
 
-
 if(!empty($res)) {
 		
 	$curl = Extension::Rest(Config::$base['HOME_URL'].'/api/CheckPayment/resultCheckPayment/');
@@ -48,7 +47,10 @@ $res = dataBase::DBpaydesk()->select('demand_uslugi','did,output,name_uslugi,in_
 
 if(!empty($res)) {
 
+    $curl = Extension::Rest();
+
 	foreach($res as $ar) {
+
 		$id_pay = dataBase::DBadmin()->select('id_payment','id_pay,more_idpay','where did='.$ar['did']);
 		$ar['id_pay'] = $id_pay[0]['id_pay'];
 		$ar['more_idpay'] = $id_pay[0]['more_idpay'];
@@ -65,12 +67,17 @@ if(!empty($res)) {
             ));
 			$ar['customerpurse'] = $r->outinvoices->outinvoice->customerpurse;
 
-			gcCheckPayment::resultPayService($ar);
+            $curl->create(Config::$base['HOME_URL'].'/api/CheckPayment/resultPayService/');
+            $curl->post($ar);
+            $curl->execute();
+
 		} elseif($r->outinvoices->outinvoice->state == 3) {
+
 			dataBase::DBpaydesk()->update('demand_uslugi',array('status'=>'n'),array(
                 'did' => $ar['did']
             ));
 		}
 	}
 }
+
 unset($res);

@@ -9,7 +9,10 @@ $db_admin = new CustomSQL_admin($DBName_admin);
 $error_did = true;
 
 if (!empty($_POST['change_status'])) {
-$db_pay_desk->demand_edit($_POST['status'],$_GET['did']);
+
+    dataBase::DBpaydesk()->update('demand_uslugi',array('status' => $_POST['status']),array(
+        'did' => $_GET['did']
+    ));
 }
 if (!empty($_POST['search_pay'])) {
     $did = $_POST['did'];
@@ -36,7 +39,7 @@ if(!empty($mass_oper[$_POST['name_uslugi']])) {
 }
 }
 */
-if (!$error_did) $info = $db_pay_desk->sel_pay_demand($did);
+if (!$error_did) $info = dataBase::DBpaydesk()->select('demand_uslugi','output,name_uslugi,purse_out,out_val,email,in_val,pole1,pole2,data,time,status,coment,purse_payment','where did ='.$did);
 
 ?>
 <html>

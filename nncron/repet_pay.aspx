@@ -10,7 +10,7 @@ $res = dataBase::DBexchange()->select('demand','did,ex_output,ex_input,out_val,i
 
 if(!empty($res)) {
 	
-	$curl = Extension::Rest(Config::$base['HOME_URL'].'/api/CheckPayment/RepetPayment/');
+	$curl = Extension::Rest();
 
 	foreach($res as $ar) {
 	
@@ -19,10 +19,29 @@ if(!empty($res)) {
 		$ar['direct'] = $ar['ex_output'].'_'.$ar['ex_input'];
 		$ar['desc_pay'] = "Direction of the exchange: {$ar['ex_output']}->{$ar['ex_input']}, ID:{$ar['did']}";
 		$ar['type_object'] = 'demand';
-		
+
+        $curl->create(Config::$base['HOME_URL'].'/api/CheckPayment/RepetPayment/');
 		$curl->post($ar);
 		$curl->execute();
 
 	}
 }
+
+
+$res = dataBase::DBpaydesk()->select('demand_uslugi','did,output,name_uslugi,in_val,out_val,pole1,pole2','where status="yn"');
+
+if(!empty($res)) {
+
+    $curl = Extension::Rest();
+
+    foreach($res as $ar) {
+
+        $curl->create(Config::$base['HOME_URL'].'/api/CheckPayment/resultPayService/');
+        $curl->post($ar);
+        $curl->execute();
+
+    }
+
+}
+
 ?>

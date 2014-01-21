@@ -19,7 +19,7 @@ $info = dataBase::DBpaydesk()->select('demand_cash','did,output,input,purse_in,o
 
 if(!empty($info)) {
 
-    $curl = Extension::Rest(Config::$base['HOME_URL'].'/api/CheckPayment/resultCheckPayment/');
+    $curl = Extension::Rest();
 
 	foreach($info as $ar) {
 
@@ -48,7 +48,7 @@ vsLog::add($log,'bill_post');
 				$params['desc_pay'] = "Refill the electronic count: ".$ar['input'].", DID".$ar['did'].", bill merchant : ".$ip[0]['id_pay'];
 				$params['did'] = $ar['did'];
 
-				//$status = gcCheckPayment::resultCheckPayment($params);
+                $curl->create(Config::$base['HOME_URL'].'/api/CheckPayment/resultCheckPayment/');
                 $curl->post($params);
                 $curl->execute();
 
