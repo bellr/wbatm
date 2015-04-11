@@ -24,9 +24,8 @@ Class DBSQL
    function DBSQL($DBName)
    {
       global $DBHost,$DBUser,$DBPassword;
-      $conn=mysql_connect($DBHost,$DBUser,$DBPassword);
-	  mysql_select_db($DBName,$conn);
-	  mysql_query("SET CHARACTER SET CP1251",$conn);
+      $conn=mysqli_connect($DBHost,$DBUser,$DBPassword,$DBName);
+	  mysqli_query("SET CHARACTER SET CP1251",$conn);
 	  $this->CONN = $conn;
       return true;
    }
@@ -36,18 +35,18 @@ Class DBSQL
       if (empty($sql)) return false;
       if (empty($this->CONN)) return false;
       $conn = $this->CONN;
-      $results = mysql_query($sql,$conn);
+      $results = mysqli_query($conn,$sql);
       if ((!$results) or (empty($results)))
       {
          return false;
       }
       $count = 0;
       $data = array();
-      while ($row = mysql_fetch_array($results)) {
+      while ($row = mysqli_fetch_array($results)) {
          $data[$count] = $row;
          $count++;
       }
-      mysql_free_result($results);
+      mysqli_free_result($results);
       return $data;
    }
 
@@ -58,9 +57,9 @@ Class DBSQL
       if (empty($this->CONN)) return false;
 
       $conn = $this->CONN;
-      $results = mysql_query($sql,$conn);
+      $results = mysqli_query($conn,$sql);
       if (!$results) return false;
-      $results = mysql_insert_id();
+      $results = mysqli_insert_id($conn);
       return $results;
    }
 
@@ -71,7 +70,7 @@ Class DBSQL
       if(empty($this->CONN)) return false;
 
       $conn = $this->CONN;
-      $result = mysql_query($sql,$conn);
+      $result = mysqli_query($conn,$sql);
       return $result;
    }
 
@@ -82,7 +81,7 @@ Class DBSQL
       if(empty($this->CONN)) return false;
 
       $conn = $this->CONN;
-      $result = mysql_query($sql,$conn);
+      $result = mysqli_query($conn,$sql);
       return $result;
    }
 
@@ -92,7 +91,7 @@ Class DBSQL
       if(empty($this->CONN)) return false;
 
       $conn = $this->CONN;
-      $result = mysql_query($sql,$conn);
+      $result = mysqli_query($conn,$sql);
       return $result;
    }
 
@@ -102,7 +101,7 @@ Class DBSQL
       if(empty($this->CONN)) return false;
 
       $conn = $this->CONN;
-      $result = mysql_query($sql,$conn);
+      $result = mysqli_query($conn,$sql);
       return $result;
    }
 
@@ -112,7 +111,7 @@ Class DBSQL
       if(empty($this->CONN)) return false;
 
       $conn = $this->CONN;
-      $result = mysql_query($sql,$conn);
+      $result = mysqli_query($conn,$sql);
       return $result;
    }
 
@@ -122,7 +121,7 @@ Class DBSQL
       if(empty($this->CONN)) return false;
 
       $conn = $this->CONN;
-      $result = mysql_query($sql,$conn);
+      $result = mysqli_query($conn,$sql);
       return $result;
    }
 
@@ -135,9 +134,8 @@ Class DBSQL_exchange
    function DBSQL_exchange($DBName_exchange)
    {
       global $DBHost,$DBUser_exchange,$DBPassword_exchange;
-      $conn=mysql_connect($DBHost,$DBUser_exchange,$DBPassword_exchange);
-	  mysql_select_db($DBName_exchange,$conn);
-	  mysql_query("SET CHARACTER SET CP1251",$conn);
+      $conn=mysqli_connect($DBHost,$DBUser_exchange,$DBPassword_exchange,$DBName_exchange);
+	  mysqli_query("SET CHARACTER SET CP1251",$conn);
 	  $this->CONN = $conn;
       return true;
    }
@@ -148,18 +146,18 @@ Class DBSQL_exchange
       if (empty($sql)) return false;
       if (empty($this->CONN)) return false;
       $conn = $this->CONN;
-      $results = mysql_query($sql,$conn);
+      $results = mysqli_query($conn,$sql);
       if ((!$results) or (empty($results)))
       {
          return false;
       }
       $count = 0;
       $data = array();
-      while ($row = mysql_fetch_array($results)) {
+      while ($row = mysqli_fetch_array($results)) {
          $data[$count] = $row;
          $count++;
       }
-      mysql_free_result($results);
+      mysqli_free_result($results);
       return $data;
    }
 
@@ -170,9 +168,9 @@ Class DBSQL_exchange
       if (empty($this->CONN)) return false;
 
       $conn = $this->CONN;
-      $results = mysql_query($sql,$conn);
+      $results = mysqli_query($conn,$sql);
       if (!$results) return false;
-      $results = mysql_insert_id();
+      $results = mysqli_insert_id();
       return $results;
    }
 
@@ -183,7 +181,7 @@ Class DBSQL_exchange
       if(empty($this->CONN)) return false;
 
       $conn = $this->CONN;
-      $result = mysql_query($sql,$conn);
+      $result = mysqli_query($conn,$sql);
       return $result;
    }
 
@@ -194,7 +192,7 @@ Class DBSQL_exchange
       if(empty($this->CONN)) return false;
 
       $conn = $this->CONN;
-      $result = mysql_query($sql,$conn);
+      $result = mysqli_query($conn,$sql);
       return $result;
    }
 
@@ -204,7 +202,7 @@ Class DBSQL_exchange
       if(empty($this->CONN)) return false;
 
       $conn = $this->CONN;
-      $result = mysql_query($sql,$conn);
+      $result = mysqli_query($conn,$sql);
       return $result;
    }
 
@@ -214,7 +212,7 @@ Class DBSQL_exchange
       if(empty($this->CONN)) return false;
 
       $conn = $this->CONN;
-      $result = mysql_query($sql,$conn);
+      $result = mysqli_query($conn,$sql);
       return $result;
    }
 
@@ -224,7 +222,7 @@ Class DBSQL_exchange
       if(empty($this->CONN)) return false;
 
       $conn = $this->CONN;
-      $result = mysql_query($sql,$conn);
+      $result = mysqli_query($conn,$sql);
       return $result;
    }
 
@@ -234,7 +232,7 @@ Class DBSQL_exchange
       if(empty($this->CONN)) return false;
 
       $conn = $this->CONN;
-      $result = mysql_query($sql,$conn);
+      $result = mysqli_query($conn,$sql);
       return $result;
    }
 
@@ -247,9 +245,8 @@ Class DBSQL_admin
    function DBSQL_admin($DBName_admin)
    {
       global $DBHost,$DBUser_admin,$DBPassword_admin;
-      $conn=@mysql_connect($DBHost,$DBUser_admin,$DBPassword_admin);
-	  @mysql_select_db($DBName_admin,$conn);
-	  mysql_query("SET CHARACTER SET CP1251",$conn);
+      $conn=mysqli_connect($DBHost,$DBUser_admin,$DBPassword_admin,$DBName_admin);
+	  mysqli_query("SET CHARACTER SET CP1251",$conn);
 	  $this->CONN = $conn;
       return true;
    }
@@ -259,18 +256,18 @@ Class DBSQL_admin
       if (empty($sql)) return false;
       if (empty($this->CONN)) return false;
       $conn = $this->CONN;
-      $results = mysql_query($sql,$conn);
+      $results = mysqli_query($conn,$sql);
       if ((!$results) or (empty($results)))
       {
          return false;
       }
       $count = 0;
       $data = array();
-      while ($row = mysql_fetch_array($results)) {
+      while ($row = mysqli_fetch_array($results)) {
          $data[$count] = $row;
          $count++;
       }
-      mysql_free_result($results);
+      mysqli_free_result($results);
       return $data;
    }
 
@@ -281,9 +278,9 @@ Class DBSQL_admin
       if (empty($this->CONN)) return false;
 
       $conn = $this->CONN;
-      $results = mysql_query($sql,$conn);
+      $results = mysqli_query($conn,$sql);
       if (!$results) return false;
-      $results = mysql_insert_id();
+      $results = mysqli_insert_id($conn);
       return $results;
    }
 
@@ -294,7 +291,7 @@ Class DBSQL_admin
       if(empty($this->CONN)) return false;
 
       $conn = $this->CONN;
-      $result = mysql_query($sql,$conn);
+      $result = mysqli_query($conn,$sql);
       return $result;
    }
 
@@ -305,7 +302,7 @@ Class DBSQL_admin
       if(empty($this->CONN)) return false;
 
       $conn = $this->CONN;
-      $result = mysql_query($sql,$conn);
+      $result = mysqli_query($conn,$sql);
       return $result;
    }
 
@@ -315,7 +312,7 @@ Class DBSQL_admin
       if(empty($this->CONN)) return false;
 
       $conn = $this->CONN;
-      $result = mysql_query($sql,$conn);
+      $result = mysqli_query($conn,$sql);
       return $result;
    }
 
@@ -325,7 +322,7 @@ Class DBSQL_admin
       if(empty($this->CONN)) return false;
 
       $conn = $this->CONN;
-      $result = mysql_query($sql,$conn);
+      $result = mysqli_query($conn,$sql);
       return $result;
    }
 
@@ -335,7 +332,7 @@ Class DBSQL_admin
       if(empty($this->CONN)) return false;
 
       $conn = $this->CONN;
-      $result = mysql_query($sql,$conn);
+      $result = mysqli_query($conn,$sql);
       return $result;
    }
 
@@ -345,7 +342,7 @@ Class DBSQL_admin
       if(empty($this->CONN)) return false;
 
       $conn = $this->CONN;
-      $result = mysql_query($sql,$conn);
+      $result = mysqli_query($conn,$sql);
       return $result;
    }
 
@@ -357,9 +354,8 @@ Class DBSQL_pay_desk
    function DBSQL_pay_desk($DBName_pay_desk)
    {
       global $DBHost,$DBUser_pay_desk,$DBPassword_pay_desk;
-      $conn=@mysql_connect($DBHost,$DBUser_pay_desk,$DBPassword_pay_desk);
-	  @mysql_select_db($DBName_pay_desk,$conn);
-	  mysql_query("SET CHARACTER SET CP1251",$conn);
+      $conn=mysqli_connect($DBHost,$DBUser_pay_desk,$DBPassword_pay_desk,$DBName_pay_desk);
+	  mysqli_query("SET CHARACTER SET CP1251",$conn);
 	  $this->CONN = $conn;
       return true;
    }
@@ -369,18 +365,18 @@ Class DBSQL_pay_desk
       if (empty($sql)) return false;
       if (empty($this->CONN)) return false;
       $conn = $this->CONN;
-      $results = mysql_query($sql,$conn);
+      $results = mysqli_query($conn,$sql);
       if ((!$results) or (empty($results)))
       {
          return false;
       }
       $count = 0;
       $data = array();
-      while ($row = mysql_fetch_array($results)) {
+      while ($row = mysqli_fetch_array($results)) {
          $data[$count] = $row;
          $count++;
       }
-      mysql_free_result($results);
+      mysqli_free_result($results);
       return $data;
    }
 
@@ -391,9 +387,9 @@ Class DBSQL_pay_desk
       if (empty($this->CONN)) return false;
 
       $conn = $this->CONN;
-      $results = mysql_query($sql,$conn);
+      $results = mysqli_query($conn,$sql);
       if (!$results) return false;
-      $results = mysql_insert_id();
+      $results = mysqli_insert_id($conn);
       return $results;
    }
 
@@ -404,7 +400,7 @@ Class DBSQL_pay_desk
       if(empty($this->CONN)) return false;
 
       $conn = $this->CONN;
-      $result = mysql_query($sql,$conn);
+      $result = mysqli_query($conn,$sql);
       return $result;
    }
 
@@ -415,7 +411,7 @@ Class DBSQL_pay_desk
       if(empty($this->CONN)) return false;
 
       $conn = $this->CONN;
-      $result = mysql_query($sql,$conn);
+      $result = mysqli_query($conn,$sql);
       return $result;
    }
 
@@ -425,7 +421,7 @@ Class DBSQL_pay_desk
       if(empty($this->CONN)) return false;
 
       $conn = $this->CONN;
-      $result = mysql_query($sql,$conn);
+      $result = mysqli_query($conn,$sql);
       return $result;
    }
 
@@ -435,7 +431,7 @@ Class DBSQL_pay_desk
       if(empty($this->CONN)) return false;
 
       $conn = $this->CONN;
-      $result = mysql_query($sql,$conn);
+      $result = mysqli_query($conn,$sql);
       return $result;
    }
 
@@ -445,7 +441,7 @@ Class DBSQL_pay_desk
       if(empty($this->CONN)) return false;
 
       $conn = $this->CONN;
-      $result = mysql_query($sql,$conn);
+      $result = mysqli_query($conn,$sql);
       return $result;
    }
 
@@ -455,7 +451,7 @@ Class DBSQL_pay_desk
       if(empty($this->CONN)) return false;
 
       $conn = $this->CONN;
-      $result = mysql_query($sql,$conn);
+      $result = mysqli_query($conn,$sql);
       return $result;
    }
 

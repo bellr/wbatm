@@ -1,4 +1,4 @@
-<?
+<?php
 define('VS_DEBUG',true);
 define('PROJECT','ATM');
 require_once("../../core/vs.php");
@@ -16,29 +16,29 @@ $fd = curl_exec($ch);
 $xmlres = simplexml_load_string($fd);
 $c=0;
 if(!empty($xmlres->Currency)) {
-	foreach($xmlres->Currency as $k=>$ar) {
-		$kurs = $xmlres->Currency[$c]->Rate;
-		switch ($xmlres->Currency[$c]->CharCode) {
-		case 'UAH':
-			dataBase::DBexchange()->query('kurs',"update kurs set konvers={$kurs} + {$kurs} * commission / 100 where indefined in ('WMU - WMB','WMB - WMU') and upd=1 and status=1 and f_exchange=0");
-			dataBase::DBexchange()->update('baserate',array('rate'=>$kurs),"where direct in ('WMU - WMB','WMB - WMU')");
-		break;
-		case 'USD':
-			dataBase::DBexchange()->query('kurs',"update kurs set konvers={$kurs} + {$kurs} * commission / 100 where indefined in ('WMZ - WMB','WMB - WMZ') and upd=1 and status=1 and f_exchange=0");
-			dataBase::DBexchange()->update('baserate',array('rate'=>$kurs),"where direct in ('WMZ - WMB','WMB - WMZ')");
-		break;
-		case 'EUR':
-			dataBase::DBexchange()->query('kurs',"update kurs set konvers={$kurs} + {$kurs} * commission / 100 where indefined in ('WME - WMB','WMB - WME') and upd=1 and status=1 and f_exchange=0");
-			dataBase::DBexchange()->update('baserate',array('rate'=>$kurs),"where direct in ('WME - WMB','WMB - WME')");
-		break;
-		case 'RUB':
-			dataBase::DBexchange()->query('kurs',"update kurs set konvers={$kurs} + {$kurs} * commission / 100 where indefined in ('WMR - WMB','WMB - WMR') and upd=1 and status=1 and f_exchange=0");
-			dataBase::DBexchange()->update('baserate',array('rate'=>$kurs),"where direct in ('WMR - WMB','WMB - WMR')");
-		break;
-		};
+    foreach($xmlres->Currency as $k=>$ar) {
+        $kurs = $xmlres->Currency[$c]->Rate;
+        switch ($xmlres->Currency[$c]->CharCode) {
+            case 'UAH':
+                dataBase::DBexchange()->query('kurs',"update kurs set konvers={$kurs} + {$kurs} * commission / 100 where indefined in ('WMU - WMB','WMB - WMU') and upd=1 and status=1 and f_exchange=0");
+                dataBase::DBexchange()->update('baserate',array('rate'=>$kurs),"where direct in ('WMU - WMB','WMB - WMU')");
+                break;
+            case 'USD':
+                dataBase::DBexchange()->query('kurs',"update kurs set konvers={$kurs} + {$kurs} * commission / 100 where indefined in ('WMZ - WMB','WMB - WMZ') and upd=1 and status=1 and f_exchange=0");
+                dataBase::DBexchange()->update('baserate',array('rate'=>$kurs),"where direct in ('WMZ - WMB','WMB - WMZ')");
+                break;
+            case 'EUR':
+                dataBase::DBexchange()->query('kurs',"update kurs set konvers={$kurs} + {$kurs} * commission / 100 where indefined in ('WME - WMB','WMB - WME') and upd=1 and status=1 and f_exchange=0");
+                dataBase::DBexchange()->update('baserate',array('rate'=>$kurs),"where direct in ('WME - WMB','WMB - WME')");
+                break;
+            case 'RUB':
+                dataBase::DBexchange()->query('kurs',"update kurs set konvers={$kurs} + {$kurs} * commission / 100 where indefined in ('WMR - WMB','WMB - WMR') and upd=1 and status=1 and f_exchange=0");
+                dataBase::DBexchange()->update('baserate',array('rate'=>$kurs),"where direct in ('WMR - WMB','WMB - WMR')");
+                break;
+        };
 
-	$c++;
-	}
+        $c++;
+    }
 }
 //update file export rates
 $rate = dataBase::DBexchange()->select('kurs','direction,konvers,direct','where status=1');
@@ -46,26 +46,55 @@ $bal = dataBase::DBexchange()->select('balance','name,balance');
 
 foreach($bal as $b) { $balance[$b['name']] = $b['balance']; }
 
-$indentification = array('WMZ' => 'WMZ','WMR' => 'WMR','WME' => 'WME','WMB' => 'WMB','WMU' => 'WMU','EasyPay' => 'ESP');
+$indentification = array('WMZ' => 'WMZ','WMR' => 'WMR','WME' => 'WME','WMB' => 'WMB','WMU' => 'WMU','EasyPay' => 'ESPBYR');
 
-foreach($rate as $r) {
-	$path_rate = explode('_',$r['direction']);
-	$amountin = $indentification[$path_rate[0]];
-	$amountout = $indentification[$path_rate[1]];
+foreach($rate as $key => $r) {
 
-	if($r['direct'] == "n") {
-		$text .= "{$amountin} -> {$amountout}: rate={$r['konvers']}, reserve={$balance[$path_rate[1]]}\n";
-	}
-	else {
-		$rates = 1/$r['konvers']+0.00001/100;
-		$text .= "{$amountin} -> {$amountout}: rate={$rates}, reserve={$balance[$path_rate[1]]}\n";
-	}
+    $path_rate = explode('_',$r['direction']);
+    $amountin = $indentification[$path_rate[0]];
+    $amountout = $indentification[$path_rate[1]];
+
+    if(empty($amountin) || empty($amountout)) break;
+
+    $rate_json[$key]['from'] = $amountin;
+    $rate_json[$key]['to'] = $amountout;
+
+    if($r['direct'] == "n") {
+
+        $text .= "{$amountin} -> {$amountout}: rate={$r['konvers']}, reserve={$balance[$path_rate[1]]}\n";
+        $rate_txt .= "{$amountin};{$amountout};{$r['konvers']};1;{$balance[$path_rate[1]]}\n";
+
+        $rate_json[$key]['in'] = (float)$r['konvers'];
+        $rate_json[$key]['out'] = 1;
+
+    } else {
+
+        $rates = 1/$r['konvers']+0.00001/100;
+        $text .= "{$amountin} -> {$amountout}: rate={$rates}, reserve={$balance[$path_rate[1]]}\n";
+        $rate_txt .= "{$amountin};{$amountout};1;{$r['konvers']};{$balance[$path_rate[1]]}\n";
+
+        $rate_json[$key]['in'] = 1;
+        $rate_json[$key]['out'] = (float)$r['konvers'];
+    }
+
+    $rate_json[$key]['amount'] = (int)$balance[$path_rate[1]];
 }
 
 $fd = fopen(Config::$base['HOME']['ROOT']."/out_rates_all.aspx","w+");
 fputs($fd, $text);
 fflush($fd);
 fclose($fd);
+
+$fd = fopen(Config::$base['HOME']['ROOT']."/rate_wmrb_txt.aspx","w+");
+fputs($fd, $rate_txt);
+fflush($fd);
+fclose($fd);
+
+$fd = fopen(Config::$base['HOME']['ROOT']."/rate_wmrb_json.aspx","w+");
+fputs($fd, json_encode(array('rates' => $rate_json)));
+fflush($fd);
+fclose($fd);
+
 
 exit;
 
@@ -331,4 +360,3 @@ BitCoin, BTCN, 660
 Unionpay, UNP, 670
 */
 ?>
-
