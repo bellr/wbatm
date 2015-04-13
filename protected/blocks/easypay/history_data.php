@@ -20,7 +20,12 @@ class history_data extends Template {
 
     public function process($P) {
 
-		$str = iconv( "windows-1251","UTF-8", Extension::Payments()->EasyPay()->connectHistoryEasypayDate($P->purse,$P->type,'',''));
+        $str = iconv( "windows-1251","UTF-8", Extension::Payments()->EasyPay()->getApi('getHistory',array(
+            'login' => $P->purse,
+            'mode' => $P->type
+        )));
+
+		//$str = iconv( "windows-1251","UTF-8", Extension::Payments()->EasyPay()->connectHistoryEasypayDate($P->purse,$P->type,'',''));
 
 		$s = "/<div class=\"balance_value\" id=\"balance_value\">([0-9\ ]+) руб.<\/div>+/i";
 		preg_match($s,$str,$b);
