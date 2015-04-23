@@ -19,26 +19,26 @@ elseif($_POST['del_d']) {$db->del_discount($_POST['id']);}
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=win-1251">
 <meta content="none" name="ROBOTS">
-<link rel="stylesheet" href="http://atm.wm-rb.net/style/style.css" type="text/css">
+<link rel="stylesheet" href="/style/style.css" type="text/css">
 </head>
 
 <body bgcolor="#FFFFFF" text="#000000" leftmargin="0" topmargin="0">
 
 <div style="width: 300px" align="right">
-	<b>Добавить скидку</b><br />
+	<b>Р”РѕР±Р°РІРёС‚СЊ СЃРєРёРґРєСѓ</b><br />
 <form method="post" action="discount.aspx">
-	Индетификатор скидки : <input type="text" id="indef" name="indef" value="" /><br />
-	Сумма скидки : <input type="text" name="amount" value="" /><br />
-	Размер скидки : <input type="text" name="size_d" value="" /><br />
-	<input type="submit" name="add_d" value="добавить"/>
+	РРЅРґРµС‚РёС„РёРєР°С‚РѕСЂ СЃРєРёРґРєРё : <input type="text" id="indef" name="indef" value="" /><br />
+	РЎСѓРјРјР° СЃРєРёРґРєРё : <input type="text" name="amount" value="" /><br />
+	Р Р°Р·РјРµСЂ СЃРєРёРґРєРё : <input type="text" name="size_d" value="" /><br />
+	<input type="submit" name="add_d" value="РґРѕР±Р°РІРёС‚СЊ"/>
 </form>
 </div>
 <table width="50%" border="0" cellspacing="1" cellpadding="4" bgcolor="#FFFFFF">
 	<tr align=center>
-		<td bgcolor="#F2F2F2">Индетификатор</td>
-		<td bgcolor="#F2F2F2">Сумма</td>
-		<td bgcolor="#F2F2F2">% скидки</td>
-		<td bgcolor="#F2F2F2">Статус</td>
+		<td bgcolor="#F2F2F2">РРЅРґРµС‚РёС„РёРєР°С‚РѕСЂ</td>
+		<td bgcolor="#F2F2F2">РЎСѓРјРјР°</td>
+		<td bgcolor="#F2F2F2">% СЃРєРёРґРєРё</td>
+		<td bgcolor="#F2F2F2">РЎС‚Р°С‚СѓСЃ</td>
 		<td bgcolor="#F2F2F2"></td>
 	</tr>
 <?
@@ -51,7 +51,7 @@ foreach($sel_d as $ar) {
 		<td bgcolor=\"#99ccff\"><input type=\"text\" size=5 name=\"size_d\" value=\"{$ar[size_d]}\" /></td>
 		<td bgcolor=\"#99ccff\"><input type=\"checkbox\" name=\"status\""; if($ar[status] == 1) echo " checked=1";
 		echo "></td>
-		<td bgcolor=\"#99ccff\"><input type=\"hidden\" name=\"id\" value=\"{$ar[id]}\" /><input type=\"submit\" name=\"edit_d\" value=\"изменить\" /> <input type=\"submit\" name=\"del_d\" value=\"удалить\" /></td>
+		<td bgcolor=\"#99ccff\"><input type=\"hidden\" name=\"id\" value=\"{$ar[id]}\" /><input type=\"submit\" name=\"edit_d\" value=\"РёР·РјРµРЅРёС‚СЊ\" /> <input type=\"submit\" name=\"del_d\" value=\"СѓРґР°Р»РёС‚СЊ\" /></td>
 
 
 	</tr>

@@ -29,8 +29,8 @@ if(!empty($_POST['del_partner'])) $db->del_partner($_POST['email']);
     <table width="90%" border="0" cellspacing="1" cellpadding="4" bgcolor="#FFFFFF">
         <tr align="center" bgcolor="#F2F2F2">
           <td><a href="admin_index.aspx" target="mainFrame" class="en_b">adminindex</a></td>
-          <td><a href="http://atm.wm-rb.net/partner_list.aspx" target="mainFrame" class="en_b">Список всех партнеров</a></td>
-          <td><a href="http://atm.wm-rb.net/partner.aspx" target="mainFrame" class="en_b">Поиск партнера</a></td>
+          <td><a href="/partner_list.aspx" target="mainFrame" class="en_b">Список всех партнеров</a></td>
+          <td><a href="/partner.aspx" target="mainFrame" class="en_b">Поиск партнера</a></td>
         </tr>
     </table>
       <hr width="90%" size="1" noshade>

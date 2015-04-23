@@ -2,4 +2,4 @@
 
 require_once('header.php');
 
-Vitalis::RouterAdmin();
+Vitalis::Router();

@@ -1,29 +1,23 @@
-<?
-class gcEasyPay {
+<?php
+class easypayJob {
 
-    /**
-     * global call https://atm.wm-rb.net/api/EasyPay/getHistory/
-     * local call Vitalis::Controller('EasyPay','getHistory',array(),'gc');
-     * @params $P->login
-     * @params $P->mode
-     */
-    public function getHistory($P) {
+    // php job.php -j easypay -m checkPayments
 
-        echo Extension::Payments()->EasyPay()->connect_history_easypay($P->login,$P->mode);
+    public function checkPayments() {
 
-    }
+        echo ';fs';
+        $EP_purse = Model::Acount_easypay('HOME')->getPurseInput(1,'desc');
+        /*dataBase::DBexchange()->update('demand',array('purse_payment'=>$EP_purse),array(
+            'did' => $P->did,
+            'status' => 'n'
+        ));*/
 
-    /**
-     * global call https://atm.wm-rb.net/api/EasyPay/getHistory/
-     * local call Vitalis::Controller('EasyPay','getHistory',array(),'gc');
-     * @params $P->login
-     * @params $P->purse_in
-     * @params $P->in_val
-     * @params $P->did
-     */
-    public function Translate($P) {
 
-        echo Extension::Payments()->EasyPay()->direct_translation($P->login,$P->purse_in,trim(sprintf("%8.0f ",$P->in_val)),$P->did);
+        /*$str = iconv( "windows-1251","UTF-8", Extension::Payments()->EasyPay()->getApi('getHistory',array(
+            'login' => $EP_purse,
+            'mode' => '4'
+        )));*/
 
     }
+
 }

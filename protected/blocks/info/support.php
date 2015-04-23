@@ -15,7 +15,11 @@ class support extends Template {
                     $sw['who'] = $sw['author'] == 0 ? '-user' : '-support';
                     $sw['i'] = $sw['author'] == 0 ? $P->vars['L_here_mail'] : $P->vars['L_answer_mail'];
                     $sw['word'] = $sw['author'] == 0 ? $P->vars['L_send_in'] : $P->vars['L_send_from'];
-                    $sw['link'] = $this->iterate_tmpl('info',__CLASS__,'link',array('id'=>$sw['id'],'email'=>$sw['email']));
+                    $sw['link'] = $this->iterate_tmpl('info',__CLASS__,'link',array(
+                        'id'        => $sw['id'],
+                        'owner_id'  => $sw['id'],
+                        'email'     => $sw['email']
+                    ));
                     $this->vars['html'] .= $this->iterate_tmpl('info',__CLASS__,'iterate',$sw);
                 }
             }

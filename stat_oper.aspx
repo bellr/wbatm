@@ -88,7 +88,8 @@ function nc(url) {
 	<option value="2011">2011</option>
 	<option value="2012">2012</option>
 	<option value="2013">2013</option>
-    <option value="2014" selected="selected">2014</option>
+    <option value="2014">2014</option>
+    <option value="2015" selected="selected">2015</option>
 	</select>
 <b>&nbsp;&nbsp;по :&nbsp;&nbsp;</b>
 			<select name="day_k">
@@ -119,7 +120,8 @@ function nc(url) {
 	<option value="2011">2011</option>
 	<option value="2012">2012</option>
 	<option value="2013">2013</option>
-    <option value="2014" selected="selected">2014</option>
+    <option value="2014">2014</option>
+    <option value="2015" selected="selected">2015</option>
 	</select>
 	<br /><br />
 	<center><input type="submit" name="sel_mount" value="Показать" style="width:100px; "onmouseover="this.style.backgroundColor='#E8E8FF';" onmouseout="this.style.backgroundColor='#f3f7ff';" id="cursor">&nbsp;</center>
@@ -207,7 +209,7 @@ endswitch;
 		<td>{$arr['in_val']} {$arr['ex_input']}</td>
 		<td>".date('d.m.Y H:i:s',$arr['add_date'])."</td>
 		<td><b class=\"{$status_class}\">{$status_name}</b></td>
-		<td><a href=\"http://atm.wm-rb.net/partner.aspx?id={$arr['partner_id']}\">{$arr['partner_id']}</a></td>
+		<td><a href=\"/partner.aspx?id={$arr['partner_id']}\">{$arr['partner_id']}</a></td>
 	</tr>";
 		}
 echo "
@@ -260,7 +262,7 @@ echo "
 		<td>{$arr['in_val']} BLR</td>
 		<td>".date('d.m.Y H:i:s',$arr['add_date'])."</td>
 		<td><b class=\"{$status_class}\">{$status_name}</b></td>
-		<td><a href=\"http://atm.wm-rb.net/partner.aspx?id={$arr['partner_id']}\">{$arr['partner_id']}</a></td>
+		<td><a href=\"/partner.aspx?id={$arr['partner_id']}\">{$arr['partner_id']}</a></td>
 	</tr>";
 		}
 echo "
@@ -306,7 +308,7 @@ echo "
 		<td>{$arr['amount']} {$arr['output']}</td>
 		<td>{$arr['data']} {$arr['time']}</td>
 		<td><b class=\"{$status_class}\">{$status_name}</b></td>
-		<td><a href=\"http://atm.wm-rb.net/partner.aspx?id={$arr['partner_id']}\">{$arr['partner_id']}</a></td>
+		<td><a href=\"/partner.aspx?id={$arr['partner_id']}\">{$arr['partner_id']}</a></td>
 	</tr>";
 		}
 echo "
@@ -350,7 +352,7 @@ echo "
 		<td>{$arr['in_val']} {$arr['input']}</td>
 		<td>".date('d.m.Y H:i:s',$arr['add_date'])."</td>
 		<td><b class=\"{$status_class}\">{$status_name}</b></td>
-		<td><a href=\"http://atm.wm-rb.net/partner.aspx?id={$arr['partner_id']}\">{$arr['partner_id']}</a></td>
+		<td><a href=\"/partner.aspx?id={$arr['partner_id']}\">{$arr['partner_id']}</a></td>
 	</tr>";
 		}
 }
@@ -396,7 +398,7 @@ $summa_bpsb = 0;
 		<td>{$arr['2']} BLR</td>
 		<td>{$arr['5']} {$arr['6']}</td>
 		<td><b class=\"{$status_class}\">{$status_name}</b></td>
-		<td><a href=\"http://atm.wm-rb.net/partner.aspx?id={$arr['8']}\">{$arr['8']}</a></td>
+		<td><a href=\"/partner.aspx?id={$arr['8']}\">{$arr['8']}</a></td>
 	</tr>
 	<tr>";
 		}

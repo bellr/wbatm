@@ -41,7 +41,7 @@ if (!(isset($_SESSION['loginuser']))) {
 <title></title>
 <meta http-equiv="Content-Type" content="text/html; charset=win-1251">
 <meta content="none" name="ROBOTS">
-<link rel="stylesheet" href="http://atm.wm-rb.net/style/style.css" type="text/css">
+<link rel="stylesheet" href="/style/style.css" type="text/css">
 </head>
 <body bgcolor="#FFFFFF" text="#000000" leftmargin="0" topmargin="0">
 <form action="<?php print "$PHP_SELF"; ?>" method="POST">
