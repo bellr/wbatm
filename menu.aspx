@@ -69,7 +69,7 @@ if(id) id.style.display=id.style.display=='none'?'block':'none';
     <td>
 	<a href="news.aspx" target="mainFrame" class="en_b">Новостная колонка</a>
 	<a href="discount.aspx" target="mainFrame" class="en_b">Скидки</a><br />
-	<a href="stat_oper.aspx" target="mainFrame" class="en_b">Статистика операций</a> <a target="_blank" href="/content/?block=webmoney.wm_example&interface=x3">wm</a><br />
+	<a href="stat_oper.aspx" target="mainFrame" class="en_b">Статистика операций</a> <a target="_blank" href="/block/?block=webmoney.wm_example&interface=x3">wm</a><br />
 	<a href="partner.aspx" target="mainFrame" class="en_b">Партнерка</a><br />
 	<a href="partner_list.aspx" target="mainFrame" class="en_b">Список всех партнеров</a><br />
 	</td>
@@ -79,8 +79,8 @@ if(id) id.style.display=id.style.display=='none'?'block':'none';
   </tr>
   <tr style="display: none;" id="d2">
     <td>
-	<a href="exch_balance.aspx" target="mainFrame" class="en_b">Балансы э/в, card</a> <a target="_blank" href="/content/?block=webmoney.wm_example&interface=x9">wm</a><br />
-	<a href="bal_ep.aspx" target="mainFrame" class="en_b">Балансы EasyPay</a> <a href="/content/?block=easypay.history_data" target="mainFrame" >ac</a><br />
+	<a href="exch_balance.aspx" target="mainFrame" class="en_b">Балансы э/в, card</a> <a target="_blank" href="/block/?block=webmoney.wm_example&interface=x9">wm</a><br />
+	<a href="bal_ep.aspx" target="mainFrame" class="en_b">Балансы EasyPay</a> <a href="/block/?block=easypay.history_data" target="mainFrame" >ac</a><br />
 	<a href="search_exch_d.aspx" target="mainFrame" class="en_b">Поиск заявки</a><br />
 	<a href="edit_kurs.aspx" target="mainFrame" class="en_b">Редактирование курсов</a><br />
 
