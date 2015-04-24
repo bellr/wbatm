@@ -1,4 +1,4 @@
-<?
+<?php
 //функция обработки платежа партнера(отправка запроса на сервис и выплаты)
 function shop_new($did,$in_val,$out_val,$output,$name_shop) {
     include("xml/conf.php");

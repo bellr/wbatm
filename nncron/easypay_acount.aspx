@@ -1,5 +1,5 @@
-<?
-require("/var/www/wmrb/data/www/billing87.wm-rb.net/nncron/customsql.inc.aspx");
+<?php
+require("customsql.inc.aspx");
 $db_exchange = new CustomSQL_exchange($DBName_exchange);
 $hour = date("H");
 $min = date("i");
@@ -46,7 +46,7 @@ $bal = $balsel;
 }
 
 }
-//echo $bal;
+echo $bal;
 
 $db_exchange->edit_EP_balance($bal*0.98);
 

@@ -1,4 +1,4 @@
-<?
+<?php
 
 //clear old deman and  not payid demands start repit from 5 minuts
 define('PROJECT','ATM');

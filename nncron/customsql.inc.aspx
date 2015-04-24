@@ -1,4 +1,4 @@
-<?
+<?php
 include('../const.inc.aspx');
 require("dbsql.inc.aspx");
 function edit_balance($parm) {

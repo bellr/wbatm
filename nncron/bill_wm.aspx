@@ -1,4 +1,4 @@
-<?
+<?php
 //start repit from 5 minuts
 define('PROJECT','ATM');
 define('VS_DEBUG',true);

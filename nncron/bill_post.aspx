@@ -1,4 +1,4 @@
-<?
+<?php
 define('PROJECT','ATM');
 define('PROJECT_ROOT',dirname(dirname(__FILE__)));
 define('VS_DEBUG',true);
