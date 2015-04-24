@@ -138,7 +138,7 @@ Class CustomSQL_exchange extends DBSQL_exchange
    //Вывод номера счета и баланса для выбора счета с наибольшим балансом
 function update_EP_purse($s_output) {
 	global $limitday,$limitmouth;
-	$sql = "select balance,outputday,output from acount_easypay where status=1 and st_output=1 and balance>=$s_output and outputday+'$s_output'<{$limitday} and output+'$s_output'<{$limitmouth} order by id ASC";
+	echo $sql = "select balance,outputday,output from acount_easypay where status=1 and st_output=1 and balance>=$s_output and outputday+'$s_output'<{$limitday} and output+'$s_output'<{$limitmouth} order by id ASC";
 	$result = $this->select($sql);return $result;
 
 }
