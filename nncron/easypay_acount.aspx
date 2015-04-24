@@ -1,5 +1,5 @@
 <?
-require("/var/www/wmrb/data/www/atm.wm-rb.net/nncron/customsql.inc.aspx");
+require("/var/www/wmrb/data/www/billing87.wm-rb.net/nncron/customsql.inc.aspx");
 $db_exchange = new CustomSQL_exchange($DBName_exchange);
 $hour = date("H");
 $min = date("i");

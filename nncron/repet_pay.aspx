@@ -6,7 +6,8 @@ define('VS_DEBUG',true);
 
 require_once(dirname(PROJECT_ROOT)."/core/vs.php");
 
-$res = dataBase::DBexchange()->select('demand','did,ex_output,ex_input,out_val,in_val,purse_in,purse_payment','where status="yn" and ex_input in ("WMZ","WMR","WME","WMG","WMY","WMU","WMB","EasyPay")');
+//$res = dataBase::DBexchange()->select('demand','did,ex_output,ex_input,out_val,in_val,purse_in,purse_payment','where status="yn" and ex_input in ("WMZ","WMR","WME","WMG","WMY","WMU","WMB","EasyPay")');
+$res = dataBase::DBexchange()->select('demand','did,ex_output,ex_input,out_val,in_val,purse_in,purse_payment','where status="yn" and ex_input in ("WMZ","WMR","WME","WMG","WMY","WMU","WMB")');
 
 if(!empty($res)) {
 	

@@ -1,7 +1,9 @@
 <?php
 define('VS_DEBUG',true);
+define('PROJECT_ROOT',dirname(dirname(__FILE__)));
 define('PROJECT','ATM');
-require_once("../../core/vs.php");
+
+require_once(dirname(PROJECT_ROOT)."/core/vs.php");
 
 //update rates in data base exchange service by bank rate
 $bank_curency = array('UAH','USD','EUR','RUB');

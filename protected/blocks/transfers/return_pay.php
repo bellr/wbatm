@@ -1,6 +1,14 @@
 <?
 class return_pay extends Template {
 
+    function __construct() {
+
+        $session = Session::get('loginuser');
+
+        if(empty($session)) exit;
+
+    }
+
     public function block($P) {
 
         $PP = Extension::Payments()->getParam('payments','webmoney');

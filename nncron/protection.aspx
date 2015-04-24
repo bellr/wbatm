@@ -28,7 +28,7 @@ $db = new ProtectSQL($DBName);
 $cheack = $db->checkUser($_SERVER['REMOTE_ADDR'],$_SERVER['HTTP_X_FORWARDED_FOR'],$_SERVER['SERVER_NAME'],time());
 if(!empty($cheack)) {
 	$db->updateTime($cheack[0][id],time()+3600);
-	exit("Âû íå âåðíî ââåëè ëîãèí èëè ïàðîëü. Äàííûå î íåóäà÷íîé ïîïûòêè âõîäà îòïðàâëåíû Àäìèíèñòðàöèè.");
+	exit("Ð’Ñ‹ Ð½Ðµ Ð²ÐµÑ€Ð½Ð¾ Ð²Ð²ÐµÐ»Ð¸ Ð»Ð¾Ð³Ð¸Ð½ Ð¸Ð»Ð¸ Ð¿Ð°Ñ€Ð¾Ð»ÑŒ. Ð”Ð°Ð½Ð½Ñ‹Ðµ Ð¾ Ð½ÐµÑƒÐ´Ð°Ñ‡Ð½Ð¾Ð¹ Ð¿Ð¾Ð¿Ñ‹Ñ‚ÐºÐ¸ Ð²Ñ…Ð¾Ð´Ð° Ð¾Ñ‚Ð¿Ñ€Ð°Ð²Ð»ÐµÐ½Ñ‹ ÐÐ´Ð¼Ð¸Ð½Ð¸ÑÑ‚Ñ€Ð°Ñ†Ð¸Ð¸.");
 }
 else {$headers = GetAllHeaders(); $s=''; foreach($headers as $key=>$ar) {$str .= "{$key}={$ar}";}
 	$db->addInfoUser($_SERVER['REMOTE_ADDR'],$_SERVER['HTTP_X_FORWARDED_FOR'],$str,$_SERVER['SERVER_NAME'],$_SERVER['REQUEST_URI'],time());}

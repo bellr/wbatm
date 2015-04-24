@@ -1,6 +1,14 @@
 <?
 class history_data extends Template {
 
+    function __construct() {
+
+        $session = Session::get('loginuser');
+
+        if(empty($session)) exit;
+
+    }
+
     public function block($P) {
 
 		$data = date("Y-m-d");

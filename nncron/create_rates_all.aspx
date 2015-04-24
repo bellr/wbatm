@@ -5,31 +5,6 @@ define('PROJECT','ATM');
 
 require_once(dirname(PROJECT_ROOT)."/core/vs.php");
 
-$arr = array(
-"WMZ_WMR" => "WMZ -> WMR",
-"WMZ_WME" => "WMZ -> WME",
-"WMZ_WMU" => "WMZ -> WMU",
-"WMZ_EasyPay" => "WMZ -> ESP",
-"WMR_WMZ" => "WMR -> WMZ",
-"WMR_WME" => "WMR -> WME",
-"WMR_WMU" => "WMR -> WMU",
-"WMR_EasyPay" => "WMR -> ESP",
-"WME_WMZ"=> "WME -> WMZ",
-"WME_WMR" => "WME -> WMR",
-"WME_WMU" => "WME -> WMU",
-"WME_EasyPay" => "WME -> ESP",
-"WMU_WMZ" => "WMU -> WMZ",
-"WMU_WMR" => "WMU -> WMR",
-"WMU_WME" => "WMU -> WME",
-"WMU_EasyPay" => "WMU -> ESP",
-"EasyPay_Z-PAYMENT" => "ESP -> Z-PAYMENT",
-"EasyPay_WMU" => "ESP -> WMU",
-"EasyPay_WME" => "ESP -> WME",
-"EasyPay_WMR" => "ESP -> WMR",
-"EasyPay_WMZ" => "ESP -> WMZ",
-"Z-PAYMENT_EasyPay" => "Z-PAYMENT -> ESP",
-);
-
 $info_direct = dataBase::DBexchange()->select('kurs','direction,konvers','where status=1');
 //$stmt_select = dataBase::DBexchange()->prepare('select konvers,direct from kurs where direction=?');
 
