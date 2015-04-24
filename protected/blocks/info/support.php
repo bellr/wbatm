@@ -1,6 +1,14 @@
 <?
 class support extends Template {
 
+    function __construct() {
+
+        $session = Session::get('loginuser');
+
+        if(empty($session)) exit;
+
+    }
+
     public function block($P) {
 
 		if(isset($P->status)) {

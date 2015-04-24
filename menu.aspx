@@ -56,7 +56,7 @@ if(id) id.style.display=id.style.display=='none'?'block':'none';
 </center>
 <table width="100%" border="0" cellspacing="1" cellpadding="4" bgcolor="#FFFFFF">
   <tr>
-    <td bgcolor="#F2F2F2"><a href="/support/?status=0" target="mainFrame" class="en_b">Служба поддержки</a> <a target="mainFrame" href="/content/?block=info.support&status=0"><b>(<? echo $support_count[0]["stotal"]; ?>)</b></a></td>
+    <td bgcolor="#F2F2F2"><a href="/support/?status=1" target="mainFrame" class="en_b">Служба поддержки</a> <a target="mainFrame" href="/support/?status=0"><b>(<? echo $support_count[0]["stotal"]; ?>)</b></a></td>
   </tr>
 
 
