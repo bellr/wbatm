@@ -10,18 +10,18 @@ class checkPaymentJob {
 
     public function easypay() {
 
-        $old_demand = time() - 30 * 3600;
+        $old_demand = time() - 0.5 * 3600;
         $demands = dataBase::DBexchange()->select('demand','*','where ex_output="EasyPay" and status="n" and add_date > '.$old_demand);
 
         if(count($demands)) {
-vsLog::add($demands);
+
             $EP_purse = Model::Acount_easypay()->getPurseInput(1,'desc');
 
             $str = iconv( "windows-1251","UTF-8", Extension::Payments()->EasyPay()->getApi('getHistory',array(
                 'login' => $EP_purse,
                 'mode' => '4'
             )));
-vsLog::add($str);
+
             if(preg_match("/200 OK/i",$str)) {
 
                 foreach($demands as $demand) {
@@ -45,9 +45,9 @@ vsLog::add($str);
 
     public function wmt() {
 
-        $old_demand = time() - 30 * 3600;
-        $date_start = date('Ymd H:i:s',$old_demand);
-        $date_end = date('Ymd H:i:s');
+        $old_demand = time() - 0.5 * 3600;
+        $date_start = date('Ymd H:i:s',$old_demand - 3600);
+        $date_end = date('Ymd H:i:s',time() + 3600);
         $data_operations = array();
         $demands = dataBase::DBexchange()->select('demand','did,ex_output,ex_input,out_val,in_val,purse_in,purse_payment','where status="n" and ex_output in ("WMZ","WMR","WME","WMG","WMY","WMU","WMB") and add_date > '.$old_demand);
 
@@ -60,49 +60,72 @@ vsLog::add($str);
                     $data_operations[$demand['ex_output']] = Extension::Payments()->Webmoney()->x3(array(
                         'purse_type' => $demand['ex_output'],
                         'start_date' => $date_start,
-                        'date_end' => $date_end,
+                        'end_date' => $date_end,
                     ),'primary_wmid');
 
                 }
 
-                foreach($data_operations[$demand['ex_output']] as $operation) {
+                foreach($data_operations[$demand['ex_output']]->operations->operation as $operation) {
 
-                    if($operation->operations->operation->desc == $demand['did'] && $operation->operations->operation->amount == $demand['out_val']) {
+                    if(strpos($operation->desc,$demand['did']) !== false && $operation->amount >= $demand['out_val']) {
 
                         dataBase::DBexchange()->query('balance',"update balance set balance=balance+".$demand['out_val']." where name='".$demand['ex_output']."'");
-                        dataBase::DBexchange()->update('demand',array('status'=>'yn'),'where did='.$demand['did']);
+                        dataBase::DBexchange()->update('demand',array(
+                            'status' => 'yn',
+                            'purse_out' => $operation->pursesrc,
+                        ),'where did='.$demand['did']);
 
+                    }
+                }
+            }
+        }
+    }
+
+    public function executeTransactiontoEasypay() {
+
+        $demands = dataBase::DBexchange()->select('demand','did,ex_output,ex_input,out_val,in_val,purse_in,purse_payment','where status="yn" and ex_input="EasyPay"');
+
+        $PP = (array)Extension::Payments()->getParam('payments');
+        $comission = $PP['com_EasyPay'];
+        d($demands);
+        if(!empty($demands)) {
+
+            foreach($demands as $demand) {
+
+                $amount_output = $demand['in_val'] + $demand['in_val'] * $comission / 100;
+                $purse = Model::Acount_easypay()->getPurseOutput($amount_output);
+
+                if($purse) {
+                    echo 'purse '.$purse;
+                    $str_result = Extension::Payments()->EasyPay()->getApi('Translate',array(
+                        'login' 	=> $purse,
+                        'purse_in' 	=> $demand['purse_in'],
+                        'in_val' 	=> trim(number_format($demand['in_val'], 0, '.', ' ')),
+                        'did' 		=> $demand['did'],
+                    ));
+                    vsLog::add($str_result,'return_easypay');
+                    if($str_result == 'ERROR_EXCESS_S') {
+                        dataBase::DBexchange()->update('acount_easypay',array('output'=>$PP['easypay']['limits']['EP_mouth'],'st_output'=>0),'where acount='.$purse);
+                        self::toEasyPay($ar);
+                    } else {
+                        $res = Extension::Payments()->EasyPay()->parseResEasypay($str_result);
+                        dataBase::DBexchange()->update('demand',array('status'=>$res['status'],'coment'=>$res['message'],'purse_payment'=>$purse),"where did=".$ar['did']);
+
+                        if($res['status'] == 'y') {
+                            Model::Acount_easypay()->updateAcountRemoval($purse,$ar['in_val'],$amount_output);
+                        }
                     }
 
                 }
 
+                d($str_result);
+                exit;
             }
 
-            vsLog::add($data_operations);
         }
 
-    /*    $res = Extension::Payments()->Webmoney()->x3((array)$P,$P->type_wmid);
-        echo "<table border=1>
-			<tr>
-			<td>Id счета</td>
-			<td>From</td>
-			<td>To</td>
-			<td>amount</td>
-			<td>Описание</td>
-			<td>Дата</td>
-			</tr>";
-        foreach($res->operations->operation as $r) {
-            echo '<tr>
-			<td>'.$r->orderid.'</td>
-			<td>'.$r->pursesrc.'</td>
-			<td>'.$r->pursedest.'</td>
-			<td>'.$r->amount.'</td>
-			<td>'.$r->desc.'</td>
-			<td>'.$r->dateupd.'</td>
-			</tr>';
-        }*/
+
 
     }
-
 
 }
