@@ -24,7 +24,7 @@ if (!empty($_POST[logincheck])) {
 if($_GET['action'] == 'logout') {
 
     session_unset();
-    header("Location: http://atm.wm-rb.dev/?sk=atomly");
+    header("Location: http://billing87.wm-rb.net/");
     exit;
 }
 
@@ -33,7 +33,7 @@ if($_GET['action'] == 'logout') {
 
 if (!(isset($_SESSION['loginuser']))) {
 
-    if ($_GET['sk'] != 'atomly') exit;
+    if ($_GET['skot'] != 'datm') exit;
 
 ?>
 <html>
