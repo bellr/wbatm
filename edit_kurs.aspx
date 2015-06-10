@@ -22,7 +22,7 @@ $sel_rate = $db_exchange->baserate($_POST['indefined']);
 $d = explode('_',$_POST['direction']);
 */
 
-$select_rate = select_rate($_POST['direction'],$_POST['indefined']);
+$select_rate = select_rate($_POST['direction'],$_POST['indefined'],$db_exchange);
 $kurs = $select_rate + $select_rate * $_POST['commission']/100;
 $db_exchange->edit_kurs($kurs,$_POST['id']);
 }

@@ -1,8 +1,7 @@
 <?
 
-function select_rate($direction,$indefined) {
+function select_rate($direction,$indefined,$db_exchange) {
 
-$db_exchange = new CustomSQL_exchange($DBName_exchange);
 switch ($direction) :
 	case ("WMZ_WMR") :
 		$sel_rate = $db_exchange->sel_wmrate($direction);

@@ -67,7 +67,7 @@ class checkPaymentJob {
 
                 foreach($data_operations[$demand['ex_output']]->operations->operation as $operation) {
 
-                    if(strpos($operation->desc,$demand['did']) !== false && $operation->amount >= $demand['out_val']) {
+                    if(strpos($operation->desc,$demand['did']) !== false && $operation->amount >= $demand['out_val'] && $operation->amountopertype == '0') {
 
                         dataBase::DBexchange()->query('balance',"update balance set balance=balance+".$demand['out_val']." where name='".$demand['ex_output']."'");
                         dataBase::DBexchange()->update('demand',array(
