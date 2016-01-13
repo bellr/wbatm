@@ -1,7 +1,4 @@
 /.idea/
-/header.php
-/.htpasswd
-/.htaccess
 
 # except do not ignore .gitignore
 !.gitignore
